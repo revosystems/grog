@@ -1,0 +1,21 @@
+{
+    "name": "badchoice/grog",
+    "description": "Easy form builder from array",
+    "require": {
+        "php": ">=5.4.0",
+        "laravelcollective/html": "5.2.*",
+        "khill/fontawesomephp" : "1.0.x"
+    },
+    "authors": [
+        {
+            "name": "Badchoice",
+            "email": "jordi@gloobus.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "BadChoice\\Grog\\": "src"
+        }
+    },
+    "minimum-stability": "stable"
+}
