@@ -13,7 +13,7 @@ trait TenantTrait{
         $username = preg_replace("/[^a-z0-9]+/", "", strtolower($username));
         App::setLocale($language);
         try {
-            DB::statement('create database RevoRetail_' . $username . ';');
+            DB::statement('create database '. config('tenants.DB_TENANTS_PREFIX') . $username . ';');
             createDBConnection($username);
 
             $newArray = [
@@ -28,7 +28,7 @@ trait TenantTrait{
 
             return $user;
         } catch (\Exception $e) {
-            DB::statement('drop database RevoRetail_' . $username . ';');
+            DB::statement('drop database '.config('tenants.DB_TENANTS_PREFIX') . $username . ';');
             $user->forceDelete();
             echo "<br>Something went wrong..." . $e->getMessage();
             return null;
@@ -55,8 +55,8 @@ trait TenantTrait{
         foreach(config('tenants.seed_classes') as $class) {
             Artisan::call('db:seed', ['--database' => $username, '--class' => $class, '--force' => true]);
         }
-/*        Artisan::call('db:seed', ['--database' => $username, '--class' => 'TenantConfigSeeder', '--force' => true]);
-        Artisan::call('db:seed'         ,['--database' => $username, '--class'    => 'TenantProductsSeeder'        ,'--force' =>true]);*/
+        /*        Artisan::call('db:seed', ['--database' => $username, '--class' => 'TenantConfigSeeder', '--force' => true]);
+                Artisan::call('db:seed'         ,['--database' => $username, '--class'    => 'TenantProductsSeeder'        ,'--force' =>true]);*/
         /*Artisan::call('db:seed'       ,['--database' => $username, '--class'    => 'TenantSeederConfiguration' ,'--force' =>true]);
         Artisan::call('db:seed'         ,['--database' => $username, '--class'    => 'TenantSeederTables'        ,'--force' =>true]);*/
     }
@@ -70,7 +70,7 @@ trait TenantTrait{
         try {
 
             DB::setDefaultConnection('mysql');
-            DB::statement('drop database RevoRetail_' . $user->username . ';');
+            DB::statement('drop database '.config('tenants.DB_TENANTS_PREFIX') . $user->username . ';');
 
             $success = Storage::deleteDirectory($user->username);
 

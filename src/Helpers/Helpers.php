@@ -1,6 +1,38 @@
 <?php
 
 /**
+ * Creates a connection for the database of the $user
+ * the name of the connection will be 'RevoRetail_{$user}'
+ * This doesn't check if the database exists
+ *
+ * @param $user
+ * @param $shouldConnect
+ */
+function createDBConnection($user, $shouldConnect = false){
+
+    $prefix     = config('tenants.DB_TENANTS_PREFIX');
+
+    $database   = $prefix.$user;
+    $host       = config('tenants.DB_HOST');
+    $username   = config('tenants.DB_USERNAME');
+    $password   = config('tenants.DB_PASSWORD');
+
+    Config::set('database.connections.'.$user, [
+        'driver'    => 'mysql',
+        'host'      => $host,
+        'database'  => $database,
+        'username'  => $username,
+        'password'  => $password,
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+    ]);
+
+    if($shouldConnect){
+        DB::setDefaultConnection($user);
+    }
+}
+
+/**
  * Creates an array that can be the input of Html::configForm('select'...) from a collection
  *
  * @param $items the collection to create the array
