@@ -10,10 +10,12 @@ trait TenantTrait{
 
     public static function newTenant($username, $password, $language = 'en', array $extraUserFields)
     {
-        $username = preg_replace("/[^a-z0-9]+/", "", strtolower($username));
+        $username       = preg_replace("/[^a-z0-9]+/", "", strtolower($username));
+        $databaseName   = config('tenants.DB_TENANTS_PREFIX') . $username;
         App::setLocale($language);
+
         try {
-            DB::statement('create database '. config('tenants.DB_TENANTS_PREFIX') . $username . ';');
+            DB::statement('create database '. $databaseName . ';');
             createDBConnection($username);
 
             $newArray = [
@@ -23,42 +25,36 @@ trait TenantTrait{
                 'language'      => $language,
             ];
             $user = static::create(array_merge($newArray,$extraUserFields));
-
             static::migrateAndSeed($username);
-
             return $user;
-        } catch (\Exception $e) {
-            DB::statement('drop database '.config('tenants.DB_TENANTS_PREFIX') . $username . ';');
-            $user->forceDelete();
-            echo "<br>Something went wrong..." . $e->getMessage();
-            return null;
+        }
+        catch (\Exception $e) {
+            DB::statement('drop database '. $databaseName . ';');
+            if($user) $user->forceDelete();
+            throw $e;
         }
     }
 
     public static function migrateAndSeed($username){
-        static::migrate($username);
-        static::seed($username);
-        //User::copyDefaultPhotos($username);
+        static::migrate             ($username);
+        static::seed                ($username);
+        static::copyDefaultPhotos   ($username);
     }
 
     public static function migrate($username){
-        //Artisan::call('migrate:install' ,['--database' => 'tenant_'.$user ]);
-        //Artisan::call('migrate'         ,['--database' => $username, '--path'     => 'database/migrations/tenants',        '--force' =>true ]);
-        //Artisan::call('migrate'         ,['--database' => $username, '--path'     => 'database/migrations/tenants/stocks', '--force' =>true ]);
         foreach(config('tenants.migration_paths') as $path){
             Artisan::call('migrate'         ,['--database' => $username, '--path'     => $path,        '--force' =>true ]);
         }
-
     }
 
     public static function seed($username){
         foreach(config('tenants.seed_classes') as $class) {
             Artisan::call('db:seed', ['--database' => $username, '--class' => $class, '--force' => true]);
         }
-        /*        Artisan::call('db:seed', ['--database' => $username, '--class' => 'TenantConfigSeeder', '--force' => true]);
-                Artisan::call('db:seed'         ,['--database' => $username, '--class'    => 'TenantProductsSeeder'        ,'--force' =>true]);*/
-        /*Artisan::call('db:seed'       ,['--database' => $username, '--class'    => 'TenantSeederConfiguration' ,'--force' =>true]);
-        Artisan::call('db:seed'         ,['--database' => $username, '--class'    => 'TenantSeederTables'        ,'--force' =>true]);*/
+    }
+
+    public static function copyDefaultPhotos($user){
+        //Artisan::queue('revo:copyPhotos', ['origin' => 'baseTenant', 'destination' => $tenant ]);
     }
 
     public static function deleteTenant($id){
