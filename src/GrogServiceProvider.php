@@ -22,6 +22,9 @@ class GrogServiceProvider extends ServiceProvider
             __DIR__.'/../resources/assets/js/' => resource_path('assets/js'),
         ], 'scripts');
 
+        $this->publishes([
+            __DIR__.'/../config/tenants.php' => config_path('tenants.php'),
+        ], 'config');
 
         AliasLoader::getInstance()->alias('Form', 'Collective\Html\FormFacade');
         AliasLoader::getInstance()->alias('Html', 'Collective\Html\HtmlFacade');
