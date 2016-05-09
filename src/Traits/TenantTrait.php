@@ -53,6 +53,10 @@ trait TenantTrait{
         }
     }
 
+    public static function rollback($username){
+        //TODO:
+    }
+
     public static function copyDefaultPhotos($user){
         //Artisan::queue('revo:copyPhotos', ['origin' => 'baseTenant', 'destination' => $tenant ]);
     }
@@ -77,5 +81,9 @@ trait TenantTrait{
             echo "Can't delete:" . $e->getMessage() . "<br>";
             return false;
         }
+    }
+
+    public static function toMigrate(){
+        return static::all()->pluck('username');
     }
 }
