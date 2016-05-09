@@ -213,7 +213,7 @@ class TenantsMigrate extends Command {
                 DB::statement("ALTER TABLE GS_permissions ADD delivery TINYINT NOT NULL DEFAULT '1'");
                 */
                 //-- REVO SERVER
-                DB::statement("ALTER TABLE `GS_stock_movements` CHANGE `quantity` `quantity` DECIMAL(8,2) NOT NULL");
+                //DB::statement("ALTER TABLE `GS_stock_movements` CHANGE `quantity` `quantity` DECIMAL(8,2) NOT NULL");
             }
         }
         catch(\Exception $e){
