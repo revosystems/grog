@@ -11,13 +11,15 @@ trait TenantTrait{
     public static function newTenant($username, $password, $language = 'en', array $extraUserFields)
     {
         $username       = preg_replace("/[^a-z0-9]+/", "", strtolower($username));
+        if(static::doesUserExists($username)){
+            throw new \Exception("Username already exists");
+        }
         $databaseName   = config('tenants.DB_TENANTS_PREFIX') . $username;
         App::setLocale($language);
 
         try {
             DB::statement('create database '. $databaseName . ';');
             createDBConnection($username);
-
             $newArray = [
                 'username'      => $username,
                 'password'      => Hash::make($password),
@@ -33,6 +35,11 @@ trait TenantTrait{
             if($user) $user->forceDelete();
             throw $e;
         }
+    }
+
+    public static function doesUserExists($username){
+        $user = static::where('username','=',$username)->first();
+        return ($user != null);
     }
 
     public static function migrateAndSeed($username){
