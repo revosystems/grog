@@ -28,10 +28,10 @@ trait SyncTrait{
     }
 
     public static function sync($fromDate = ''){
-
         $instance    = new static;
-
-        $newQuery    = static::syncFilter($instance->newQuery()->where('created_at', '>', $fromDate)->orWhereNull('created_at'));
+        $newQuery    = static::syncFilter($instance->newQuery()->where(function($query) use (&$fromDate){
+            $query->where('created_at','>',$fromDate)->orWhereNull('created_at');
+        }));
         $updateQuery = static::syncFilter($instance->newQuery()->where('updated_at', '>', $fromDate)->where('created_at','<', $fromDate ));
         $deleteQuery = static::syncFilter($instance->newQuery()->onlyTrashed()->where('deleted_at', '>', $fromDate));
 
