@@ -1,16 +1,6 @@
 <?php namespace BadChoice\Grog\Traits;
 
 /**
- * SaveContentsNested removes the arrays inside arrays and calls the saveKeyNested(array) for each of those arrays
- * Each model can then implement the saveKeyNested(array) where `Key` is the array key
- * This function is useful to set the parent_id or do any other prior transformation, as well as calling again the saveNested to perform the actual create/update
- * Example:
- *     public function saveContentsNested($array){
- *          foreach($array as $content){
- *              $content->order_id = $this->id;
- *              OrderContent::saveNested((array)$content);
- *          }
- *      }
  * Class SaveNestedTrait
  * @package BadChoice\Grog\Traits
  */
@@ -33,9 +23,11 @@ trait SaveNestedTrait
         }
 
         foreach ($toSaveNested as $key => $array) {
-            $method = "save" . ucfirst($key) . "Nested";
-            if (method_exists($object, $method)) {
-                $object->$method($array);
+            $relatedModel = $object->$key()->getRelated();
+            $foreignKey   = $object->$key()->getPlainForeignKey();
+            foreach($array as $content){
+                $content->$foreignKey    = $object->id;
+                $relatedModel::saveNested((array)$content);
             }
         }
         return $object;
