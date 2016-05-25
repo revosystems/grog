@@ -52,6 +52,7 @@ trait TenantTrait{
         foreach(config('tenants.migration_paths') as $path){
             Artisan::call('migrate'         ,['--database' => $username, '--path'     => $path,        '--force' =>true ]);
         }
+        static::doExtraMigrations();
     }
 
     public static function seed($username){
@@ -61,7 +62,9 @@ trait TenantTrait{
     }
 
     public static function rollback($username){
-        //TODO:
+        foreach(config('tenants.migration_paths') as $path){
+            Artisan::call('migrate:rollback'   ,array('--database' => $username, '--force' =>true));
+        }
     }
 
     public static function copyDefaultPhotos($user){
@@ -92,5 +95,9 @@ trait TenantTrait{
 
     public static function toMigrate(){
         return static::all()->pluck('username');
+    }
+
+    public static function doExtraMigrations(){
+
     }
 }
