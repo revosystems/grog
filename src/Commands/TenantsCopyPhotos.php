@@ -1,4 +1,4 @@
-<?php namespace App\Console\Commands;
+<?php namespace BadChoice\Grog\Commands;
 
 use Illuminate\Console\Command;
 use Storage;
