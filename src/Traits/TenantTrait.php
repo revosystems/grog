@@ -68,7 +68,11 @@ trait TenantTrait{
     }
 
     public static function copyDefaultPhotos($username){
-        Artisan::queue('tenants:copyPhotos', ['origin' => 'baseTenant', 'destination' => $username ]);
+        try {
+            Artisan::queue('tenants:copyPhotos', ['origin' => 'baseTenant', 'destination' => $username]);
+        }catch(\Exception $e){
+
+        }
     }
 
     public static function deleteTenant($id){
