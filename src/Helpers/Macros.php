@@ -55,6 +55,12 @@ Html::macro('active', function($active){
     echo "</span>";
 });
 
+Html::macro('switch',function($active){
+    if($active)     echo "<span style='color:green'>" . FA::icon('toggle-on')->x2();
+    else            echo "<span style='color:gray'>" . FA::icon('toggle-off')->x2();
+    echo "</span>";
+});
+
 Html::macro('featured', function($active){
     echo "<span style='color:black'>";
     if($active)     echo FA::icon('star');
