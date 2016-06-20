@@ -13,7 +13,7 @@ class CSVImporter{
         $interpreter    = new Interpreter();
         $header         = null;
 
-        $observer = new LexerAssociativeObserver();
+        $observer = new CSVImporterLexerAssociativeObserver();
         $observer->setCallback($callback);
 
 
