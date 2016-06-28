@@ -1,4 +1,4 @@
-<?php namespace BadChoice\Grog;
+<?php namespace BadChoice\Grog\FormBuilder;
 
 use Html;
 
