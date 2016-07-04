@@ -8,7 +8,7 @@ use Hash;
 
 trait TenantTrait{
 
-    public static function newTenant($username, $password, $language = 'en', array $extraUserFields)
+    public static function newTenant($username, $password, $language = 'en', array $extraUserFields = [])
     {
         $username       = preg_replace("/[^a-z0-9]+/", "", strtolower($username));
         if(static::doesUserExists($username)){
