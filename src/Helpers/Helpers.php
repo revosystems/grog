@@ -125,3 +125,13 @@ function format_timezone_name($name) {
     $name = str_replace('St ', 'St. ', $name);
     return $name;
 }
+
+
+public function measureBlock($callback, $title = "Measure"){
+    $start = microtime(true);
+    $callback();
+    $end    = microtime(true);
+    $diff   = $end - $start;
+
+    echo $title .": " . $diff;
+}
