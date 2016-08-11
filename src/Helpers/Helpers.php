@@ -126,8 +126,7 @@ function format_timezone_name($name) {
     return $name;
 }
 
-
-public function measureBlock($callback, $title = "Measure"){
+function measureBlock($callback, $title = "Measure"){
     $start = microtime(true);
     $callback();
     $end    = microtime(true);
