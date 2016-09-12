@@ -7,15 +7,17 @@
  *
  * @param $user
  * @param $shouldConnect
+ * @param bool $reports true to connect to the read only database insatance
  */
-function createDBConnection($user, $shouldConnect = false){
+function createDBConnection($user, $shouldConnect = false, $reports = false) {
 
     $prefix     = config('tenants.DB_TENANTS_PREFIX');
 
-    $database   = $prefix.$user;
-    $host       = config('tenants.DB_HOST');
-    $username   = config('tenants.DB_USERNAME');
-    $password   = config('tenants.DB_PASSWORD');
+    $database       = $prefix.$user;
+    $host           = ($reports) ? config('tenants.DB_REPORTS_HOST') : config('tenants.DB_HOST');
+    $username       = config('tenants.DB_USERNAME');
+    $password       = config('tenants.DB_PASSWORD');
+    $tablesPrefix   = config('tenants.DB_TABLES_PREFIX');
 
     Config::set('database.connections.'.$user, [
         'driver'    => 'mysql',
@@ -25,6 +27,7 @@ function createDBConnection($user, $shouldConnect = false){
         'password'  => $password,
         'charset'   => 'utf8',
         'collation' => 'utf8_unicode_ci',
+        'prefix'    => $tablesPrefix,
     ]);
 
     if($shouldConnect){
@@ -67,8 +70,8 @@ function setNullOnEmptyStrings($array){
 /**
  * Prints the number with the currency format
  */
-function currencyNumber($number, $currency = null){
-    $symbol = currencySymbol($currency ? : Auth::user()->getSettings()->currency);
+function currencyNumber($number, $currency){
+    $symbol = $symbol = currencySymbol($currency);
     if($currency == 'USD' || $currency == 'GBP')    { return $symbol . ' ' . number_format($number, 2);    }
     else                                            { return commaNumber($number, true) . ' ' . $symbol;   }
 }
