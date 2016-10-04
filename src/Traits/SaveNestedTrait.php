@@ -6,7 +6,7 @@
  */
 trait SaveNestedTrait
 {
-    public static function saveNested(array $nestedArray)
+    public static function saveNested(array $nestedArray, $createIfNotFound = false)
     {
         $toSaveNested = [];
         foreach ($nestedArray as $key => $value) {
@@ -17,7 +17,8 @@ trait SaveNestedTrait
         }
         if ($nestedArray['id']) {
             $object = static::find($nestedArray['id']);
-            $object->update($nestedArray);
+            if($object)                 $object->update($nestedArray);
+            else if($createIfNotFound)  $object = static::create($nestedArray);
         } else {
             $object = static::create($nestedArray);
         }
@@ -27,7 +28,7 @@ trait SaveNestedTrait
             $foreignKey   = $object->$key()->getPlainForeignKey();
             foreach($array as $content){
                 $content->$foreignKey    = $object->id;
-                $relatedModel::saveNested((array)$content);
+                $relatedModel::saveNested((array)$content, $createIfNotFound);
             }
         }
         return $object;
