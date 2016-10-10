@@ -16,15 +16,10 @@ trait SyncTrait{
 
 
     public static function shouldSync($fromDate){
-
         if($fromDate == '') return '1';
-
         $instance    = new static;
-        $toSyncQuery = static::syncFilter($instance->newQuery()->withTrashed()->where('updated_at', '>', $fromDate));
-
-        if(count($toSyncQuery->get()) > 0 )
-            return "1";
-        return "0";
+        $shouldSync  = static::syncFilter($instance->newQuery()->withTrashed()->where('updated_at', '>', $fromDate)->select('id'))->first();
+        return ($shouldSync != null) ? "1" : "0";
     }
 
     public static function sync($fromDate = ''){
