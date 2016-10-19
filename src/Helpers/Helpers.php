@@ -137,3 +137,8 @@ function measureBlock($callback, $title = "Measure"){
 
     echo $title .": " . $diff;
 }
+
+function nameOrDash($object){
+    if($object) return $object->name;
+    return "--";
+}
