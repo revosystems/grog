@@ -1,17 +1,20 @@
 <?php namespace BadChoice\Grog\Traits;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * Class SaveNestedTrait
  * @package BadChoice\Grog\Traits
  */
-trait SaveNestedTrait
-{
+trait SaveNestedTrait{
+
     public static function saveNested(array $nestedArray, $createIfNotFound = false)
     {
         $toSaveNested = [];
         foreach ($nestedArray as $key => $value) {
-            if (is_array($value)) {
-                $toSaveNested[$key] = $value;
+            if (static::isRelation($key) ) {
+                if($value != null) {
+                    $toSaveNested[$key] = $value;
+                }
                 unset($nestedArray[$key]);
             }
         }
@@ -26,11 +29,23 @@ trait SaveNestedTrait
         foreach ($toSaveNested as $key => $array) {
             $relatedModel = $object->$key()->getRelated();
             $foreignKey   = $object->$key()->getPlainForeignKey();
-            foreach($array as $content){
-                $content->$foreignKey    = $object->id;
-                $relatedModel::saveNested((array)$content, $createIfNotFound);
+
+            if(is_array($array)) {
+                foreach ($array as $content) {
+                    $content->$foreignKey = $object->id;
+                    $relatedModel::saveNested((array)$content, $createIfNotFound);
+                }
+            }
+            else{
+                $array->$foreignKey = $object->id;
+                $relatedModel::saveNested((array)$array, $createIfNotFound);
             }
         }
         return $object;
+    }
+
+    public static function isRelation($key){
+        $object = new static();
+        return  method_exists( $object, $key) && ($object->$key() instanceof Relation);
     }
 }
