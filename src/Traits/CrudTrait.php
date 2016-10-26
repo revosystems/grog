@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 trait CrudTrait{
+
+    protected $viewPrefix = '';
+
     /*
     |--------------------------------------------------------------------------
     | EDIT FORM
@@ -46,7 +49,7 @@ trait CrudTrait{
     public function index(){
         $model  = ucfirst(str_singular( resourceName() ));
         $class  = $this->getModelClassFromRoute();
-        return view( resourcePrefix() , ["data" => $class::all(), "model" => $model ]);
+        return view( $this->viewPrefix . resourcePrefix() , ["data" => $class::all(), "model" => $model ]);
     }
 
     /**
@@ -85,7 +88,7 @@ trait CrudTrait{
     public function show($id){
         $resource = str_singular( resourceName() );
         $viewPath = collect(explode('.',request()->route()->getName()))->slice(0,-2)->implode('.') . '.'.$resource;
-        return view( $viewPath , ["object" => $this->getObjectFromRoute($id), "model" => ucfirst($resource) ]);
+        return view( $this->viewPrefix . $viewPath , ["object" => $this->getObjectFromRoute($id), "model" => ucfirst($resource) ]);
     }
 
     /**
