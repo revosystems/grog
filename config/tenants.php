@@ -14,5 +14,5 @@ return [
     "seed_classes" => [
         TenantConfigSeeder::class,
         TenantProductsSeeder::class,
-    ]
+    ],
 ];

@@ -1,57 +1,45 @@
-<?php
+<?php use BadChoice\Grog\Services\ResourceRoute;
 
-// RESTFul controllers helpers
 function url_to_create(){
-    return url(resourcePrefix('/').'/create');
+    return ResourceRoute::url_to_create();
 }
 
 function url_to_index(){
-    return url(resourcePrefix('/'));
+    return ResourceRoute::url_to_index();
 }
 
 function link_to_show($object, $title = null, $attributes = null){
-    return link_to_route(object_route($object) .'.show', $title,['id' => $object->id], $attributes);
+    return ResourceRoute::link_to_show($object,$title,$attributes);
 }
 
 function link_to_edit($object){
-    return link_to_route( object_route($object) .'.edit','', ["id" => $object->id] , ["class" => "showPopup edit"]) ;
+    return ResourceRoute::link_to_edit($object);
 }
 
 function link_to_delete($object){
-    return link_to_route( object_route($object).'.destroy','',["id" => $object->id] , ["class" => "delete-resource"]) ;
+    return ResourceRoute::link_to_delete($object);
 }
 
 function route_to_update(){
-    return resourcePrefix() .'.update';
+    return ResourceRoute::route_to_update();
 }
 
 function route_to_store(){
-    return resourcePrefix(). '.store';
+    return ResourceRoute::route_to_store();
 }
 
-//--------------------------------------------------------
 function resource_route($model, $separator = '.'){
-    $namespace = collect(explode('\\',Kernel::modelClass($model)))->slice(-2);
-    return collect([
-        rtrim(adminPrefix(),'/'),
-        strtolower($namespace->first()),
-        lcfirst(str_plural($namespace->last()))
-    ])->implode($separator);
+    ResourceRoute::resource_route($model,$separator);
 }
 
 function object_route($object, $separator = '.'){
-    $namespace = collect(explode('\\',get_class($object)))->slice(-2);
-    return collect([
-        rtrim(adminPrefix(),'/'),
-        strtolower($namespace->first()),
-        lcfirst(str_plural($namespace->last())),
-    ])->implode($separator);
+    ResourceRoute::object_route($object,$separator);
 }
-//--------------------------------------------------------
+
 function resourceName(){
-    return collect(explode('.',request()->route()->getName()))->slice(0,-1)->last();
+    ResourceRoute::resourceName();
 }
 
 function  resourcePrefix($separator = '.'){
-    return collect(explode('.',request()->route()->getName()))->slice(0,-1)->implode($separator);
+    ResourceRoute::resourcePrefix($separator);
 }

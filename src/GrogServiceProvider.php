@@ -5,17 +5,19 @@ use Illuminate\Foundation\AliasLoader;
 
 class GrogServiceProvider extends ServiceProvider
 {
+
     public function boot(){
         $this->publishes([
-            __DIR__.'/../resources/currencies/' => resource_path('currencies'),
+            __DIR__.'/../resources/currencies/'     => resource_path('currencies'),
         ], 'resources');
 
         $this->publishes([
-            __DIR__.'/../resources/assets/js/' => resource_path('assets/js'),
+            __DIR__.'/../resources/assets/js/'      => resource_path('assets/js'),
         ], 'scripts');
 
         $this->publishes([
-            __DIR__.'/../config/tenants.php' => config_path('tenants.php'),
+            __DIR__.'/../config/tenants.php'        => config_path('tenants.php'),
+            __DIR__.'/../config/resourceRoute.php'  => config_path('resourceRoute.php'),
         ], 'config');
 
         AliasLoader::getInstance()->alias('Form', 'Collective\Html\FormFacade');
@@ -26,8 +28,8 @@ class GrogServiceProvider extends ServiceProvider
         require_once __DIR__ . '/Helpers/RouteHelpers.php';
     }
 
-    public function register()
-    {
+    public function register(){
+
         $this->app->register('Collective\Html\HtmlServiceProvider');
         $this->app->register('Khill\Fontawesome\FontAwesomeServiceProvider');
     }
