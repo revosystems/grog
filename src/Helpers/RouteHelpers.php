@@ -29,17 +29,17 @@ function route_to_store(){
 }
 
 function resource_route($model, $separator = '.'){
-    ResourceRoute::resource_route($model,$separator);
+    return ResourceRoute::resource_route($model,$separator);
 }
 
 function object_route($object, $separator = '.'){
-    ResourceRoute::object_route($object,$separator);
+    return ResourceRoute::object_route($object,$separator);
 }
 
 function resourceName(){
-    ResourceRoute::resourceName();
+    return ResourceRoute::resourceName();
 }
 
 function  resourcePrefix($separator = '.'){
-    ResourceRoute::resourcePrefix($separator);
+    return ResourceRoute::resourcePrefix($separator);
 }

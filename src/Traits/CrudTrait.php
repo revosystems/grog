@@ -1,5 +1,6 @@
 <?php namespace BadChoice\Grog\Traits;
 
+use BadChoice\Grog\Services\ResourceRoute;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
@@ -32,7 +33,7 @@ trait CrudTrait{
     }
 
     protected static function getNamespaceForModel($model){
-        return modelClass($model);
+        return ResourceRoute::modelClass($model);
     }
 
     //================================================================================================

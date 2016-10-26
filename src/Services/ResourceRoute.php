@@ -4,8 +4,10 @@ class ResourceRoute{
 
     protected $prefix = '';
 
-    public static function modelClass(){
-        return "";
+    public static function modelClass($model){
+        $method = explode("@",config('resourceRoute.namespaceResolver'));
+        $action = $method[1];
+        return $method[0]::$action($model);
     }
 
     public static function url_to_create(){
@@ -50,7 +52,6 @@ class ResourceRoute{
         return collect([
             rtrim(config('resourceRoute.admin_prefix'),'/'),
             strtolower($namespace->first()),
-            strtolower($namespace->first()),
             lcfirst(str_plural($namespace->last())),
         ])->implode($separator);
     }
@@ -59,7 +60,7 @@ class ResourceRoute{
         return collect(explode('.',request()->route()->getName()))->slice(0,-1)->last();
     }
 
-    public static function  resourcePrefix($separator = '.'){
+    public static function resourcePrefix($separator = '.'){
         return collect(explode('.',request()->route()->getName()))->slice(0,-1)->implode($separator);
     }
 }
