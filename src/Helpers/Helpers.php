@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Config;
 
 /**
  * Creates a connection for the database of the $user
@@ -11,8 +12,7 @@
  */
 function createDBConnection($user, $shouldConnect = false, $reports = false) {
 
-    $prefix     = config('tenants.DB_TENANTS_PREFIX');
-
+    $prefix         = config('tenants.DB_TENANTS_PREFIX');
     $database       = $prefix.$user;
     $host           = ($reports) ? config('tenants.DB_REPORTS_HOST') : config('tenants.DB_HOST');
     $username       = config('tenants.DB_USERNAME');
@@ -112,7 +112,6 @@ function timezone_list() {
 
         array_multisort($offsets, $timezones);
     }
-
     return $timezones;
 }
 
@@ -141,4 +140,8 @@ function measureBlock($callback, $title = "Measure"){
 function nameOrDash($object){
     if($object) return $object->name;
     return "--";
+}
+
+function icon($icon) {
+    return FA::icon($icon);
 }

@@ -5,15 +5,7 @@ use Illuminate\Foundation\AliasLoader;
 
 class GrogServiceProvider extends ServiceProvider
 {
-    //protected $defer = false;
-
-    /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
+    public function boot(){
         $this->publishes([
             __DIR__.'/../resources/currencies/' => resource_path('currencies'),
         ], 'resources');
@@ -31,25 +23,12 @@ class GrogServiceProvider extends ServiceProvider
 
         require_once __DIR__ . '/Helpers/Macros.php';
         require_once __DIR__ . '/Helpers/Helpers.php';
+        require_once __DIR__ . '/Helpers/RouteHelpers.php';
     }
 
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->app->register('Collective\Html\HtmlServiceProvider');
         $this->app->register('Khill\Fontawesome\FontAwesomeServiceProvider');
-
-        /*$this->app->singleton('cart', function ($app) {
-            return new Cart\Cart();
-        });*/
-    }
-
-    public function provides()
-    {
-        //return ['cart'];
     }
 }
