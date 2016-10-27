@@ -8,6 +8,10 @@ function url_to_index(){
     return ResourceRoute::url_to_index();
 }
 
+function url_to_show($object){
+    return ResourceRoute::url_to_show($object);
+}
+
 function link_to_show($object, $title = null, $attributes = null){
     return ResourceRoute::link_to_show($object,$title,$attributes);
 }

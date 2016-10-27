@@ -18,6 +18,10 @@ class ResourceRoute{
         return url(resourcePrefix('/'));
     }
 
+    public static function url_to_show($object){
+        return url(object_route($object,'/').'/'.$object->id);
+    }
+
     public static function link_to_show($object, $title = null, $attributes = null){
         return link_to_route( object_route($object) .'.show', $title,['id' => $object->id], $attributes);
     }
