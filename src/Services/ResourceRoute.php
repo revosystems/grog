@@ -40,20 +40,20 @@ class ResourceRoute{
 
     public static function resource_route($model, $separator = '.'){
         $namespace = collect(explode('\\',static::modelClass($model)))->slice(-2);
-        return collect([
+        return ltrim(collect([
             rtrim(config('resourceRoute.admin_prefix'),'/'),
             strtolower($namespace->first()),
             lcfirst(str_plural($namespace->last()))
-        ])->implode($separator);
+        ])->implode($separator),'.');
     }
 
     public static function object_route($object, $separator = '.'){
         $namespace = collect(explode('\\',get_class($object)))->slice(-2);
-        return collect([
+        return ltrim(collect([
             rtrim(config('resourceRoute.admin_prefix'),'/'),
             strtolower($namespace->first()),
             lcfirst(str_plural($namespace->last())),
-        ])->implode($separator);
+        ])->implode($separator),'.');
     }
 
     public static function resourceName(){

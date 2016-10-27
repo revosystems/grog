@@ -49,11 +49,11 @@ function addRuleURL(field){
 }
 
 function addRuleIP(field){
-    $("#"+field).attr('pattern','((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$')
+    $("#"+field).attr('pattern','((^|\\.)((25[0-5])|(2[0-4]\\d)|(1\\d\\d)|([1-9]?\\d))){4}$')
                 .attr('title', 'Needs to be an IP');
 }
 
-function addRuleDomain(field){
-    $("#"+field).attr('pattern','^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$')
-                .attr('title', 'Needs to be an IP');
+function addRuleDomain($field){
+    $("#"+field).attr('pattern','^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,6}$')
+                .attr('title', 'Needs to be a domain');
 }
