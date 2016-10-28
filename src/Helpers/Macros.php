@@ -9,7 +9,7 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
     else if ($type == "url")        $b = Form::url      ($field, $model->$field,        ['placeholder' => Lang::choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "number")     $b = Form::number   ($field, $model->$field,        ['placeholder' => Lang::choice('admin.'.$field,1) , 'id' => $field]);
 
-    else if ($type == "select")     $b = Form::select   ($field, $selectArray, $model->$field);
+    else if ($type == "select")     $b = Form::select   ($field, $selectArray, $model->$field, ['id' => $field]);
     else if ($type == "check")      $b = Form::check    ($field, true, $model->$field,  ['id' => $field]);
     else if ($type == "hidden")     {
         $b = Form::text     ($field, $model->$field, ['id'=>$field,'style'=>'display:none']);
