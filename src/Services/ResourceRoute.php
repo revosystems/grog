@@ -46,7 +46,7 @@ class ResourceRoute{
         $namespace = collect(explode('\\',static::modelClass($model)))->slice(-2);
         return ltrim(collect([
             rtrim(config('resourceRoute.admin_prefix'),'/'),
-            strtolower($namespace->first()),
+            lcfirst($namespace->first()),
             lcfirst(str_plural($namespace->last()))
         ])->implode($separator),'.');
     }
@@ -55,7 +55,7 @@ class ResourceRoute{
         $namespace = collect(explode('\\',get_class($object)))->slice(-2);
         return ltrim(collect([
             rtrim(config('resourceRoute.admin_prefix'),'/'),
-            strtolower($namespace->first()),
+            lcfirst($namespace->first()),
             lcfirst(str_plural($namespace->last())),
         ])->implode($separator),'.');
     }
