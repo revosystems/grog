@@ -8,7 +8,10 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
     else if ($type == "date")       $b = Form::date     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "url")        $b = Form::url      ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "number")     $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "color")      $b = Form::color    ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "color")      {
+        $b =  Form::color   ($field, $model->$field,       ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => 'colorpicker']);
+        $b .= Form::text    ($field, $model->$field,       ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    }
 
     else if ($type == "select")     $b = Form::select   ($field, $selectArray, $model->$field, ['id' => $field]);
     else if ($type == "check")      $b = Form::check    ($field, true, $model->$field,  ['id' => $field]);
