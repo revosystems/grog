@@ -2,12 +2,13 @@
 
 Html::macro("configForm", function($type, $model, $field, $showDesc = false, $selectArray = null){
 
-    if      ($type == "text")       $b = Form::text     ($field, $model->$field,        ['placeholder' => Lang::choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "textarea")   $b = Form::textarea ($field, $model->$field,        ['placeholder' => Lang::choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "email")      $b = Form::email    ($field, $model->$field,        ['placeholder' => Lang::choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "date")       $b = Form::date     ($field, $model->$field,        ['placeholder' => Lang::choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "url")        $b = Form::url      ($field, $model->$field,        ['placeholder' => Lang::choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "number")     $b = Form::number   ($field, $model->$field,        ['placeholder' => Lang::choice('admin.'.$field,1) , 'id' => $field]);
+    if      ($type == "text")       $b = Form::text     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "textarea")   $b = Form::textarea ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "email")      $b = Form::email    ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "date")       $b = Form::date     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "url")        $b = Form::url      ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "number")     $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "color")      $b = Form::color    ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
 
     else if ($type == "select")     $b = Form::select   ($field, $selectArray, $model->$field, ['id' => $field]);
     else if ($type == "check")      $b = Form::check    ($field, true, $model->$field,  ['id' => $field]);
@@ -18,7 +19,7 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
     }
 
     echo "<div class='label'>";
-    $a = Form::label($field.'Label',  Lang::choice('admin.'.str_replace("_id","",$field),1));
+    $a = Form::label($field.'Label',  trans_choice('admin.'.str_replace("_id","",$field),1));
     echo $a;
     echo "</div><div class='field''>";
     echo $b;
