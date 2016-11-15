@@ -21,9 +21,9 @@ function createDBConnection($user, $shouldConnect = false, $reports = false) {
     $tablesPrefix   = config('tenants.DB_TABLES_PREFIX');
 
     Config::set('database.connections.'.$user, [
-        'driver'    => App::enviorement('testing') ? 'sqlite' : 'mysql',
+        'driver'    => App::environment('testing') ? 'sqlite' : 'mysql',
         'host'      => $host,
-        'database'  => App::enviorement('testing') ? ':memory:' : $database,
+        'database'  => App::environment('testing') ? ':memory:' : $database,
         'username'  => $username,
         'password'  => $password,
         'charset'   => 'utf8',
