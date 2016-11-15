@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 
 /**
@@ -20,9 +21,9 @@ function createDBConnection($user, $shouldConnect = false, $reports = false) {
     $tablesPrefix   = config('tenants.DB_TABLES_PREFIX');
 
     Config::set('database.connections.'.$user, [
-        'driver'    => 'mysql',
+        'driver'    => App::enviorement('testing') ? 'sqlite' : 'mysql',
         'host'      => $host,
-        'database'  => $database,
+        'database'  => App::enviorement('testing') ? ':memory:' : $database,
         'username'  => $username,
         'password'  => $password,
         'charset'   => 'utf8',
