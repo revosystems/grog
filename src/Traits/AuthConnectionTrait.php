@@ -2,6 +2,6 @@
 
 trait AuthConnectionTrait{
     public function getConnectionName(){
-        return config('tenants.DB_AUTH_CONNECTION');
+        return env('DB_AUTH_CONNECTION','mysql');
     }
 }
