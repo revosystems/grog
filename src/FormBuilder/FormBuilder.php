@@ -23,8 +23,10 @@ class FormBuilder{
             $showDesc   = isset($formItem["showDesc"])  ?$formItem["showDesc"]  : false;
             $field      = isset($formItem["field"])     ?$formItem["field"]     : $formItem;
             $select     = isset($formItem["select"])    ?$formItem["select"]    : null;
+            $multiple   = isset($formItem["multiple"])  ?$formItem["multiple"]    : null;
 
-            if($select != null) { echo Html::configForm('select', $object, $field, $showDesc, $select);         }
+            if($select  )       { echo Html::configForm('select', $object, $field, $showDesc, $select);         }
+            else if($multiple)  { echo Html::configForm('select', $object, $field, $showDesc, $select, true);   }
             else                { echo Html::configForm($type, $object, $field, $showDesc);                     }
         }
         echo '</div>';

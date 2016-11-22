@@ -1,11 +1,12 @@
 <?php
 
-Html::macro("configForm", function($type, $model, $field, $showDesc = false, $selectArray = null){
+Html::macro("configForm", function($type, $model, $field, $showDesc = false, $selectArray = null, $multiple = false){
 
     if      ($type == "text")       $b = Form::text     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "textarea")   $b = Form::textarea ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "email")      $b = Form::email    ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "date")       $b = Form::date     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "time")       $b = Form::time     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "url")        $b = Form::url      ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "number")     $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "color")      {
@@ -13,7 +14,12 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
         $b .= Form::text    ($field, $model->$field,       ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     }
 
-    else if ($type == "select")     $b = Form::select   ($field, $selectArray, $model->$field, ['id' => $field]);
+    else if ($type == "select" && !$multiple)     $b = Form::select   ($field, $selectArray, $model->$field, ['id' => $field]);
+    else if ($type == "select" && $multiple)      {
+        $field = substr($field,0,-2);
+        $b = Form::hidden ($field, []);
+        $b .= Form::select($field.'[]', $selectArray, $model->$field, ['id' => $field, "multiple" => $multiple]);
+    }
     else if ($type == "check")      $b = Form::check    ($field, true, $model->$field,  ['id' => $field]);
     else if ($type == "hidden")     {
         $b = Form::text     ($field, $model->$field, ['id'=>$field,'style'=>'display:none']);
@@ -30,7 +36,6 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
         echo "<br><p>". trans('admin.'.$field.'Desc') . "</p>";
     }
     echo"</div>";
-
 });
 
 /**
