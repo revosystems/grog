@@ -17,7 +17,7 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
     else if ($type == "select" && !$multiple)     $b = Form::select   ($field, $selectArray, $model->$field, ['id' => $field]);
     else if ($type == "select" && $multiple)      {
         $field = substr($field,0,-2);
-        $b = Form::hidden ($field, []);
+        $b = Form::hidden ($field, -1);
         $b .= Form::select($field.'[]', $selectArray, $model->$field, ['id' => $field, "multiple" => $multiple]);
     }
     else if ($type == "check")      $b = Form::check    ($field, true, $model->$field,  ['id' => $field]);

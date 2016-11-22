@@ -26,7 +26,7 @@ class FormBuilder{
             $multiple   = isset($formItem["multiple"])  ?$formItem["multiple"]    : null;
 
             if($select  )       { echo Html::configForm('select', $object, $field, $showDesc, $select);         }
-            else if($multiple)  { echo Html::configForm('select', $object, $field, $showDesc, $select, true);   }
+            else if($multiple)  { echo Html::configForm('select', $object, $field, $showDesc, $multiple, true);   }
             else                { echo Html::configForm($type, $object, $field, $showDesc);                     }
         }
         echo '</div>';
