@@ -9,6 +9,7 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
     else if ($type == "time")       $b = Form::time     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "url")        $b = Form::url      ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "number")     $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "number")     $b = Form::decimal  ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field, 'step' => 'any']);
     else if ($type == "color")      {
         $b =  Form::color   ($field, $model->$field,       ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => 'colorpicker']);
         $b .= Form::text    ($field, $model->$field,       ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
