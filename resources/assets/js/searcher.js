@@ -14,6 +14,7 @@
             resultsDiv   : 'results',
             allDiv       : 'all',
             minChars     : 3,
+            onFound      : null,    //Callback funcion when found
         }, options);
 
 
@@ -22,7 +23,7 @@
             if(searchString.length >= settings.minChars) {
                 $('#' + settings.resultsDiv).show();
                 $('#' + settings.allDiv).hide();
-                $('#' + settings.resultsDiv).load(callbackUrl + $(this).val());
+                $('#' + settings.resultsDiv).load(callbackUrl + $(this).val(), settings.onFound);
             }
             else{
                 $('#' + settings.resultsDiv).hide();
