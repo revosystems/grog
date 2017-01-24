@@ -45,17 +45,18 @@ class ResourceRoute{
     public static function resource_route($model, $separator = '.'){
         $namespace = collect(explode('\\',static::modelClass($model)))->slice(-2);
         return ltrim(collect([
-            rtrim(config('resourceRoute.admin_prefix'),'/'),
-            lcfirst($namespace->first()),
+            //rtrim(config('resourceRoute.admin_prefix'),'/'),      //Laravel 5.2
+            //lcfirst($namespace->first()),                         //Laravel 5.2
             lcfirst(str_plural($namespace->last()))
         ])->implode($separator),'.');
     }
 
     public static function object_route($object, $separator = '.'){
+
         $namespace = collect(explode('\\',get_class($object)))->slice(-2);
         return ltrim(collect([
-            rtrim(config('resourceRoute.admin_prefix'),'/'),
-            lcfirst($namespace->first()),
+            //rtrim(config('resourceRoute.admin_prefix'),'/'),      //Laravel 5.2
+            //lcfirst($namespace->first()),                         //Laravel 5.2
             lcfirst(str_plural($namespace->last())),
         ])->implode($separator),'.');
     }
@@ -65,6 +66,7 @@ class ResourceRoute{
     }
 
     public static function resourcePrefix($separator = '.'){
-        return collect(explode('.',request()->route()->getName()))->slice(0,-1)->implode($separator);
+        return collect(explode('/',request()->path()))->implode($separator);
+        //return collect(explode('.',request()->route()->getName()))->slice(0,-1)->implode($separator); //Laravel 5.2
     }
 }
