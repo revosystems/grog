@@ -35,11 +35,11 @@ class ResourceRoute{
     }
 
     public static function route_to_update(){
-        return resourcePrefix() .'.update';
+        return resourceName() .'.update';
     }
 
     public static function route_to_store(){
-        return resourcePrefix(). '.store';
+        return resourceName(). '.store';
     }
 
     public static function resource_route($model, $separator = '.'){
