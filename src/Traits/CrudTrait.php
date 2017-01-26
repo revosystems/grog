@@ -87,7 +87,7 @@ trait CrudTrait{
      */
     public function show($id){
         $resource = str_singular( resourceName() );
-        $viewPath = collect(explode('.',request()->route()->getName()))->slice(0,-2)->implode('.') . '.'.$resource;
+        $viewPath = collect(explode('/',request()->path()))->slice(0,-2)->implode('.') . '.'.$resource;
         return view( $this->viewPrefix . $viewPath , ["object" => $this->getObjectFromRoute($id), "model" => ucfirst($resource) ]);
     }
 
