@@ -19,7 +19,7 @@ class ResourceRoute{
     }
 
     public static function url_to_show($object){
-        return url(object_route($object,'/').'/'.$object->id);
+        return url(resource_url($object).'/'.$object->id);
     }
 
     public static function link_to_show($object, $title = null, $attributes = null){
@@ -35,11 +35,11 @@ class ResourceRoute{
     }
 
     public static function route_to_update(){
-        return resourcePrefix() .'.update';
+        return resourceName() .'.update';
     }
 
     public static function route_to_store(){
-        return resourcePrefix(). '.store';
+        return resourceName(). '.store';
     }
 
     public static function resource_route($model, $separator = '.'){
@@ -49,6 +49,15 @@ class ResourceRoute{
             //lcfirst($namespace->first()),                         //Laravel 5.2
             lcfirst(str_plural($namespace->last()))
         ])->implode($separator),'.');
+    }
+
+    public static function resource_url($object){
+        $namespace = collect(explode('\\',get_class($object)))->slice(-2);
+        return ltrim(collect([
+            rtrim(config('resourceRoute.admin_prefix'),'/'),      //Laravel 5.2
+            lcfirst($namespace->first()),                         //Laravel 5.2
+            lcfirst(str_plural($namespace->last())),
+        ])->implode("/"),'.');
     }
 
     public static function object_route($object, $separator = '.'){

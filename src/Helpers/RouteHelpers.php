@@ -40,6 +40,9 @@ function object_route($object, $separator = '.'){
     return ResourceRoute::object_route($object,$separator);
 }
 
+function resource_url($object){
+    return ResourceRoute::resource_url($object);
+}
 function resourceName(){
     return ResourceRoute::resourceName();
 }
