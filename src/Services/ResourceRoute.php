@@ -52,7 +52,11 @@ class ResourceRoute{
     }
 
     public static function resource_url($object){
-        $namespace = collect(explode('\\',get_class($object)))->slice(-2);
+        if( is_string($object)){
+            $namespace = collect(explode('\\',static::modelClass($object)))->slice(-2);
+        }else {
+            $namespace = collect(explode('\\', get_class($object)))->slice(-2);
+        }
         return ltrim(collect([
             rtrim(config('resourceRoute.admin_prefix'),'/'),      //Laravel 5.2
             lcfirst($namespace->first()),                         //Laravel 5.2
