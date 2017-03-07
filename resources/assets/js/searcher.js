@@ -23,7 +23,7 @@
             if(searchString.length >= settings.minChars) {
                 $('#' + settings.resultsDiv).show();
                 $('#' + settings.allDiv).hide();
-                $('#' + settings.resultsDiv).load(callbackUrl + $(this).val(), settings.onFound);
+                $('#' + settings.resultsDiv).load(callbackUrl + $(this).val().replace(' ', '%20'), settings.onFound);
             }
             else{
                 $('#' + settings.resultsDiv).hide();
