@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Config;
  * @param bool $reports true to connect to the read only database insatance
  */
 function createDBConnection($user, $shouldConnect = false, $reports = false) {
-
+    if( ! $user) return;
     $prefix         = config('tenants.DB_TENANTS_PREFIX');
     $database       = $prefix.$user;
     $host           = ($reports) ? config('tenants.DB_REPORTS_HOST')     : config('tenants.DB_HOST');
