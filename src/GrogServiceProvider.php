@@ -1,7 +1,9 @@
 <?php namespace BadChoice\Grog;
 
+use Collective\Html\HtmlServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
+use Khill\FontAwesome\Laravel\FontAwesomeServiceProvider;
 
 class GrogServiceProvider extends ServiceProvider
 {
@@ -29,8 +31,7 @@ class GrogServiceProvider extends ServiceProvider
     }
 
     public function register(){
-
-        $this->app->register('Collective\Html\HtmlServiceProvider');
-        $this->app->register('Khill\Fontawesome\FontAwesomeServiceProvider');
+        $this->app->register(HtmlServiceProvider::class);
+        $this->app->register(FontAwesomeServiceProvider::class);
     }
 }
