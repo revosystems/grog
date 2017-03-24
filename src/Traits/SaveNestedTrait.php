@@ -28,7 +28,8 @@ trait SaveNestedTrait{
 
         foreach ($toSaveNested as $key => $array) {
             $relatedModel = $object->$key()->getRelated();
-            $foreignKey   = $object->$key()->getPlainForeignKey();
+            $foreignKey   = $object->$key()->getForeignKeyName();
+
 
             if(is_array($array)) {
                 foreach ($array as $content) {
