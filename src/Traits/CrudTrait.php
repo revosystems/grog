@@ -7,6 +7,7 @@ use App\Http\Requests;
 trait CrudTrait{
 
     protected $viewPrefix = '';
+    protected $editPage   = 'admin.common.edit';
 
     /*
     |--------------------------------------------------------------------------
@@ -66,7 +67,7 @@ trait CrudTrait{
         }
         $formConfig         = $this->getFormConfig($object);
         $validationRules    = $this->getValidationRules();
-        return view('admin.common.edit', compact('object', 'formConfig', 'validationRules') );
+        return view($this->editPage, compact('object', 'formConfig', 'validationRules') );
     }
 
     /**
@@ -101,7 +102,7 @@ trait CrudTrait{
         $object             = $this->getObjectFromRoute($id);
         $formConfig         = $this->getFormConfig($object);
         $validationRules    = $this->getValidationRules($id);
-        return view('admin.common.edit', compact('object', 'formConfig', 'validationRules') );
+        return view($this->editPage, compact('object', 'formConfig', 'validationRules') );
     }
 
     /**
