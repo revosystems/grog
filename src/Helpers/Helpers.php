@@ -1,7 +1,6 @@
 <?php
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
-use Khill\FontAwesome\FontAwesome;
 
 /**
  * Creates a connection for the database of the $user
@@ -145,5 +144,5 @@ function nameOrDash($object){
 }
 
 function icon($icon) {
-    return new FontAwesome($icon);
+    return FA::icon($icon);
 }
