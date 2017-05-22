@@ -1,40 +1,17 @@
 <?php namespace BadChoice\Grog\Traits;
 
+use BadChoice\Grog\Services\AccountCreator;
 use DB;
 use Artisan;
 use Storage;
-use App;
-use Hash;
+
 
 trait TenantTrait{
 
     public static function newTenant($username, $password, $language = 'en', array $extraUserFields = [])
     {
-        $username       = preg_replace("/[^a-z0-9]+/", "", strtolower($username));
-        if(static::doesUserExists($username)){
-            throw new \Exception("Username already exists");
-        }
-        $databaseName   = config('tenants.DB_TENANTS_PREFIX') . $username;
-        App::setLocale($language);
-
-        try {
-            DB::statement('create database '. $databaseName . ';');
-            createDBConnection($username);
-            $newArray = [
-                'username'      => $username,
-                'password'      => Hash::make($password),
-                'appPassword'   => Hash::make($password),
-                'language'      => $language,
-            ];
-            $user = static::create(array_merge($newArray,$extraUserFields));
-            static::migrateAndSeed($username);
-            return $user;
-        }
-        catch (\Exception $e) {
-            DB::statement('drop database '. $databaseName . ';');
-            if($user) $user->forceDelete();
-            throw $e;
-        }
+        $accountCreator = app()->make( AccountCreator::class );
+        return $accountCreator->with($username, $password, $language)->create($extraUserFields);
     }
 
     public static function doesUserExists($username){
