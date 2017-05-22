@@ -139,17 +139,17 @@ trait CrudTrait{
     public function destroy($id){
         $object  = $this->getObjectFromRoute($id);
         // Check if object can be deleted (with custom conditions)
-        if(method_exists($object,'canBeDeleted')) {
-            try{
-                if (!$object::canBeDeleted($id)) {
-                    return redirect()->back()->withErrors(['delete' => trans('admin.cantDelete')]);
+        if( method_exists($object, 'canBeDeleted') ) {
+            try {
+                if ( ! $object::canBeDeleted($id) ) {
+                    return request()->ajax() ? response()->json(trans('admin.cantDelete'), 412) : redirect()->back()->withErrors(['delete' => trans('admin.cantDelete')]);
                 }
-            }catch(\Exception $e){
-                return redirect()->back()->withErrors(['delete' => $e->getMessage()]);
+            } catch(\Exception $e){
+                return request()->ajax() ? response()->json($e->getMessage(), 412) : redirect()->back()->withErrors(['delete' => $e->getMessage()]);
             }
         }
         $object->delete();
-        return request()->ajax() ? response()->json("ok",200) : redirect()->back()->with(["message" => "Deleted"]);
+        return request()->ajax() ? response()->json("ok", 200) : redirect()->back()->with(["message" => "Deleted"]);
     }
 
     //====================================================================================================
