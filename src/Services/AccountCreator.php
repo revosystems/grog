@@ -37,7 +37,6 @@ class AccountCreator{
             $this->createUser($extraFields);
             $this->migrateAndSeed();
         }catch(\Exception $e){
-            dd( $e->getMessage() );
             $this->rollback();
             throw new CreateAccountException($e->getMessage());
         }
