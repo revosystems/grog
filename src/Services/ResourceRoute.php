@@ -75,7 +75,8 @@ class ResourceRoute{
     }
 
     public static function resourceName(){
-        return collect(explode('.',request()->route()->getName()))->slice(0,-1)->last();
+        //return collect(explode('.',request()->route()->getName()))->slice(0,-1)->last();
+        return collect(explode('.',request()->route()->getName()))->slice(0,-1)->implode('.');
     }
 
     public static function resourcePrefix($separator = '.'){
