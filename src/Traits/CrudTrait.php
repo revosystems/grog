@@ -89,11 +89,7 @@ trait CrudTrait{
     public function show($id){
         $resource = str_singular( resourceName() );
         $viewPath = collect(explode('/',request()->path()))->slice(0,-2)->implode('.') . '.'.$resource;
-        $object = $this->getObjectFromRoute($id);
-        if ( ! $object ) {
-            return view( 'errors.404' );
-        }
-        return view( $this->viewPrefix . $viewPath , ["object" => $object, "model" => ucfirst($resource) ]);
+        return view( $this->viewPrefix . $viewPath , ["object" => $this->getObjectFromRoute($id), "model" => ucfirst($resource) ]);
     }
 
     /**
@@ -166,6 +162,6 @@ trait CrudTrait{
 
     protected function getObjectFromRoute($id){
         $class = $this->getModelClassFromRoute();
-        return $class::find($id);
+        return $class::findOrFail($id);
     }
 }
