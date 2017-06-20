@@ -162,6 +162,6 @@ trait CrudTrait{
 
     protected function getObjectFromRoute($id){
         $class = $this->getModelClassFromRoute();
-        return $class::find($id);
+        return $class::findOrFail($id);
     }
 }
