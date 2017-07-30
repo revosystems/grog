@@ -26,7 +26,7 @@ abstract class BaseTenantsCommand extends Command {
         }
         
         if( $this->option('tenant') != '' ){
-            return $this->handleTenant( $this->option('tenant') );
+            return $this->privateHandleTenant( $this->option('tenant') );
         }
 
         $this->handleAllTenants();
