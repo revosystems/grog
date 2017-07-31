@@ -1,4 +1,6 @@
-<?php namespace BadChoice\Grog\Commands;
+<?php 
+
+namespace BadChoice\Grog\Commands;
 
 use Illuminate\Console\Command;
 
@@ -9,8 +11,8 @@ use Exception;
 class TenantsMigrate extends BaseTenantsCommand {
 
     protected $signature = 'tenants:migrate
-	                            {--rollback : Rollback all tenants or tenant selected}
-	                            {--tenant= : Specify a tenant to migrate (or rollback)}';
+                                {--rollback : Rollback all tenants or tenant selected}
+                                {--tenant= : Specify a tenant to migrate (or rollback)}';
 
     protected $description = 'Migrate all tenants';
 
@@ -35,12 +37,12 @@ class TenantsMigrate extends BaseTenantsCommand {
         Artisan::call('queue:restart'); //To reload the code for queues (on daemon)
     }
 
-    protected abstract function handleTenant($tenant){
+    protected function handleTenant($tenant){
         $class = config('tenants.user');
-        createDBConnection($user);
+        createDBConnection($tenant);
         if( $this->option('rollback') ){  
-            return $class::rollback($user);
+            return $class::rollback($tenant);
         }
-        $class::migrate($user);
+        $class::migrate($tenant);
     }
 }
