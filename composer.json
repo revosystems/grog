@@ -3,7 +3,7 @@
     "description": "Easy form builder from array",
     "require": {
         "php": ">=5.4.0",
-        "laravelcollective/html": ">=5.4.*",
+        "laravelcollective/html": ">=5.4.0",
         "khill/fontawesomephp" : "1.1.x",
         "goodby/csv": "1.2.0"
     },
