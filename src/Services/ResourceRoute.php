@@ -5,13 +5,13 @@ class ResourceRoute{
     protected $prefix = '';
 
     public static function modelClass($model){
-        $method = explode("@",config('resourceRoute.namespaceResolver'));
+        $method = explode("@", config('resourceRoute.namespaceResolver'));
         $action = $method[1];
         return $method[0]::$action($model);
     }
 
     public static function url_to_create(){
-        return url(resourcePrefix('/').'/create');
+        return url(resourcePrefix('/') . '/create');
     }
 
     public static function url_to_index(){
@@ -19,23 +19,23 @@ class ResourceRoute{
     }
 
     public static function url_to_show($object){
-        return url(resource_url($object).'/'.$object->id);
+        return url(resource_url($object) . '/' . $object->id);
     }
 
     public static function link_to_show($object, $title = null, $attributes = null){
-        return link_to_route( object_route($object) .'.show', $title,['id' => $object->id], $attributes);
+        return link_to_route( object_route($object) . '.show', $title, ['id' => $object->id], $attributes);
     }
 
     public static function link_to_edit($object){
-        return link_to_route( object_route($object) .'.edit','', ["id" => $object->id] , ["class" => "showPopup edit"]) ;
+        return link_to_route( object_route($object) . '.edit', '', ["id" => $object->id], ["class" => "showPopup edit"]) ;
     }
 
     public static function link_to_delete($object){
-        return link_to_route( object_route($object).'.destroy','',["id" => $object->id] , ["class" => "delete-resource"]) ;
+        return link_to_route( object_route($object) . '.destroy', '',["id" => $object->id], ["class" => "delete-resource", "data-delete" => "confirm resource"]) ;
     }
 
     public static function route_to_update(){
-        return resourceName() .'.update';
+        return resourceName() . '.update';
     }
 
     public static function route_to_store(){
@@ -48,7 +48,7 @@ class ResourceRoute{
             //rtrim(config('resourceRoute.admin_prefix'),'/'),      //Laravel 5.2
             //lcfirst($namespace->first()),                         //Laravel 5.2
             lcfirst(str_plural($namespace->last()))
-        ])->implode($separator),'.');
+        ])->implode($separator), '.');
     }
 
     public static function resource_url($object){
@@ -58,10 +58,10 @@ class ResourceRoute{
             $namespace = collect(explode('\\', get_class($object)))->slice(-2);
         }
         return ltrim(collect([
-            rtrim(config('resourceRoute.admin_prefix'),'/'),      //Laravel 5.2
+            rtrim(config('resourceRoute.admin_prefix'), '/'),      //Laravel 5.2
             lcfirst($namespace->first()),                         //Laravel 5.2
             lcfirst(str_plural($namespace->last())),
-        ])->implode("/"),'.');
+        ])->implode("/"), '.');
     }
 
     public static function object_route($object, $separator = '.'){
