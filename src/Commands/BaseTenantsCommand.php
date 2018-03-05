@@ -43,6 +43,7 @@ abstract class BaseTenantsCommand extends Command {
         $users->each(function($user) use($bar){
             $this->privateHandleTenant($user);
             $bar->advance();
+            $bar->closeAllConnections();
         });
         $bar->finish();
     }
@@ -53,6 +54,13 @@ abstract class BaseTenantsCommand extends Command {
         }
         catch(\Exception $e){
             $this->error("[Error: {$tenant}]  " . $e->getMessage() . ' ' . $e->getFile() . ':' . $e->getLine() );
+        }
+    }
+
+    private function closeAllConnections()
+    {
+        foreach (app('db')->getConnections() as $connection) {
+            $connection->disconnect();
         }
     }
 
