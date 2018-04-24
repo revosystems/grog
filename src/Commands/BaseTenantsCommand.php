@@ -43,7 +43,7 @@ abstract class BaseTenantsCommand extends Command {
         $users->each(function($user) use($bar){
             $this->privateHandleTenant($user);
             $bar->advance();
-            $bar->closeAllConnections();
+            $this->closeAllConnections();
         });
         $bar->finish();
     }

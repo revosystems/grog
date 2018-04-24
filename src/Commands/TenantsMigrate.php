@@ -47,13 +47,5 @@ class TenantsMigrate extends BaseTenantsCommand
             return $class::rollback($tenant);
         }
         $class::migrate($tenant);
-        $this->closeAllConnections();   //To avoid the `too many connections exception`
-    }
-
-    private function closeAllConnections()
-    {
-        foreach (app('db')->getConnections() as $connection) {
-            $connection->disconnect();
-        }
     }
 }
