@@ -12,7 +12,8 @@ class TenantsMigrate extends BaseTenantsCommand
 {
     protected $signature = 'tenants:migrate
                                 {--rollback : Rollback all tenants or tenant selected}
-                                {--tenant= : Specify a tenant to migrate (or rollback)}';
+                                {--tenant= : Specify a tenant to migrate (or rollback)}
+                                {--force : Force migration (or rollback)}';
 
     protected $description = 'Migrate all tenants';
 
@@ -28,7 +29,8 @@ class TenantsMigrate extends BaseTenantsCommand
             $this->error('*******************************');
             $this->info('');
         }
-        return $this->confirm('Do you wish to continue?', false);
+        
+        return $this->option('force') || $this->confirm('Do you wish to continue?', false);
     }
 
     protected function postHandle()
