@@ -24,11 +24,9 @@ trait SyncTrait{
 
     public static function sync($fromDate = ''){
         $instance    = new static;
-        $newQuery    = static::syncFilter($instance->newQuery()->where(function($query) use (&$fromDate){
-            $query->where('created_at','>',$fromDate)->orWhereNull('created_at');
-        }));
-        $updateQuery = static::syncFilter($instance->newQuery()->where('updated_at', '>', $fromDate)->where('created_at','<', $fromDate ));
-        $deleteQuery = static::syncFilter($instance->newQuery()->onlyTrashed()->where('deleted_at', '>', $fromDate));
+        $newQuery    = static::getNewSyncQuery($fromDate, $instance);
+        $updateQuery = static::getUpdatedSyncQuery($fromDate, $instance);
+        $deleteQuery = static::getDeletedSyncQuery($fromDate, $instance);
 
         if($fromDate == ''){
             return array(
@@ -43,5 +41,22 @@ trait SyncTrait{
             'updated'   => $updateQuery ->get()->toArray(),
             'deleted'   => $deleteQuery ->get()->toArray(),
         );
+    }
+
+    protected static function getNewSyncQuery($fromDate, $instance)
+    {
+        return static::syncFilter($instance->newQuery()->where(function($query) use (&$fromDate){
+            $query->where('created_at','>',$fromDate)->orWhereNull('created_at');
+        }));
+    }
+
+    protected static function getDeletedSyncQuery($fromDate, $instance)
+    {
+        return static::syncFilter($instance->newQuery()->onlyTrashed()->where('deleted_at', '>', $fromDate));
+    }
+
+    protected static function getUpdatedSyncQuery($fromDate, $instance)
+    {
+        return static::syncFilter($instance->newQuery()->where('updated_at', '>', $fromDate)->where('created_at', '<', $fromDate));
     }
 }
