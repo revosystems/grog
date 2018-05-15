@@ -22,11 +22,17 @@ trait SyncTrait{
         return ($shouldSync != null) ? "1" : "0";
     }
 
-    public static function sync($fromDate = ''){
+    public static function sync($fromDate = '', $skip = null, $take = null){
         $instance    = new static;
         $newQuery    = static::getNewSyncQuery($fromDate, $instance);
         $updateQuery = static::getUpdatedSyncQuery($fromDate, $instance);
         $deleteQuery = static::getDeletedSyncQuery($fromDate, $instance);
+
+        if ($skip !== null && $take !== null) {
+            $newQuery    = $newQuery->skip($skip)->take($take);
+            $updateQuery = $updateQuery->skip($skip)->take($take);
+            $deleteQuery = $deleteQuery->skip($skip)->take($take);
+        }
 
         if($fromDate == ''){
             return array(
