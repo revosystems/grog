@@ -18,7 +18,7 @@ trait SaveNestedTrait{
                 unset($nestedArray[$key]);
             }
         }
-        if ($nestedArray['id']) {
+        if (isset($nestedArray['id']) && $nestedArray['id']) {
             $object = static::find($nestedArray['id']);
             if($object)                 $object->update($nestedArray);
             else if($createIfNotFound)  $object = static::create($nestedArray);
