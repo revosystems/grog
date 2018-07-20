@@ -2,14 +2,15 @@
 
 Html::macro("configForm", function($type, $model, $field, $showDesc = false, $selectArray = null, $multiple = false){
 
-    if      ($type == "text")       $b = Form::text     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "textarea")   $b = Form::textarea ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "email")      $b = Form::email    ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "date")       $b = Form::date     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "time")       $b = Form::time     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "url")        $b = Form::url      ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "number")     $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "decimal")    $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field, 'step' => 'any']);
+    if      ($type == "text")               $b = Form::text     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "textarea")           $b = Form::textarea ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "email")              $b = Form::email    ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "date")               $b = Form::date     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "time")               $b = Form::time     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "timeWithSeconds")    $b = Form::time     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field, 'step' => '1']);
+    else if ($type == "url")                $b = Form::url      ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "number")             $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+    else if ($type == "decimal")            $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field, 'step' => 'any']);
     else if ($type == "color")      {
         $b =  Form::color   ($field, $model->$field,       ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => 'colorpicker']);
         $b .= Form::text    ($field, $model->$field,       ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
