@@ -1,4 +1,6 @@
 <?php
+
+use BadChoice\Grog\Services\RVConnection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 
@@ -12,28 +14,7 @@ use Illuminate\Support\Facades\Config;
  * @param bool $reports true to connect to the read only database insatance
  */
 function createDBConnection($user, $shouldConnect = false, $reports = false) {
-    if( ! $user) return;
-    $prefix         = config('tenants.DB_TENANTS_PREFIX');
-    $database       = $prefix.$user;
-    $host           = ($reports) ? config('tenants.DB_REPORTS_HOST')     : config('tenants.DB_HOST');
-    $username       = ($reports) ? config('tenants.DB_REPORTS_USERNAME') : config('tenants.DB_USERNAME');
-    $password       = ($reports) ? config('tenants.DB_REPORTS_PASSWORD') : config('tenants.DB_PASSWORD');
-    $tablesPrefix   = config('tenants.DB_TABLES_PREFIX');
-
-    Config::set('database.connections.'.$user, [
-        'driver'    => App::environment('testing') ? 'sqlite' : 'mysql',
-        'host'      => $host,
-        'database'  => App::environment('testing') ? ':memory:' : $database,
-        'username'  => $username,
-        'password'  => $password,
-        'charset'   => 'utf8',
-        'collation' => 'utf8_unicode_ci',
-        'prefix'    => $tablesPrefix,
-    ]);
-
-    if($shouldConnect){
-        DB::setDefaultConnection($user);
-    }
+    (new RVConnection($user))->setConnectionName('master')->create($shouldConnect);
 }
 
 /**
