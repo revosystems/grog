@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Config;
  * @param bool $reports true to connect to the read only database insatance
  */
 function createDBConnection($user, $shouldConnect = false, $reports = false) {
-    (new RVConnection($user))->setConnectionName('master')->create($shouldConnect);
+    (new RVConnection($user))->useReportsDatabase($reports)->create($shouldConnect);
 }
 
 /**
