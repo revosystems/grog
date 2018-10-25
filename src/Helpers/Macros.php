@@ -30,7 +30,7 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
     }
 
     echo "<div class='label'>";
-    $a = Form::label($field.'Label',  trans_choice('admin.'.str_replace("_id","",$field),1));
+    $a = Form::label($field.'Label',  trans_choice('admin.'.camel_case(str_replace("_id","",$field)),1));
     echo $a;
     echo "</div><div class='field''>";
     echo $b;
