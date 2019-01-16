@@ -8,6 +8,8 @@ use Storage;
 
 trait TenantTrait{
 
+    public static $avoidExtraMigrations = false;
+
     public static function newTenant($username, $password, $language = 'en', array $extraUserFields = [])
     {
         $accountCreator = app()->make( AccountCreator::class );
@@ -29,7 +31,8 @@ trait TenantTrait{
         foreach(config('tenants.migration_paths') as $path){
             Artisan::call('migrate'         ,['--database' => $username, '--path'     => $path,        '--force' =>true ]);
         }
-        static::doExtraMigrations();
+        if (! TenantTrait::$avoidExtraMigrations)
+            static::doExtraMigrations();
     }
 
     public static function seed($username){

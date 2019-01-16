@@ -13,6 +13,7 @@ class AccountCreator{
     protected $language;
     protected $user;
     protected $databaseName;
+    protected $shouldSeed = true;
 
     public function with($username, $password, $language){
         $this->username = preg_replace("/[^a-z0-9]+/", "", strtolower($username));;
@@ -21,16 +22,19 @@ class AccountCreator{
         return $this;
     }
 
-    public function create( $extraFields = []){
+    public function shouldSeed($shouldSeed) {
+        $this->shouldSeed = $shouldSeed;
+        return $this;
+    }
 
-        if( $this->doesUserExists()){
+    public function create( $extraFields = []){
+        if ($this->doesUserExists()){
             throw new CreateAccountException("Username already exists");
         }
 
         if( ! $this->password || strlen($this->password) < 4){
             throw new CreateAccountException("Password to weak");
         }
-
 
         try {
             $this->createDatabase();
@@ -63,7 +67,10 @@ class AccountCreator{
         App::setLocale($this->language);
         createDBConnection($this->username);
         $userClass  = config('tenants.user');
-        $userClass::migrateAndSeed($this->username);
+        if ($this->shouldSeed) {
+            return $userClass::migrateAndSeed($this->username);
+        }
+        $userClass::migrate($this->username);
     }
 
     protected function rollback(){
