@@ -36,19 +36,19 @@ class RVConnection {
 
     public function create($shouldConnect = false){
         if (! $this->databaseName) return;
-
         Config::set('database.connections.'.$this->connectionName, [
             'driver'    => App::environment('testing') ? 'sqlite' : 'mysql',
             'database'  => $this->getDatabase(),
-            'host'      => ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_HOST')     : config('tenants.DB_HOST'),
-            'username'  => ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_USERNAME') : config('tenants.DB_USERNAME'),
-            'password'  => ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_PASSWORD') : config('tenants.DB_PASSWORD'),
+            'host'      => $this->getHost(),
+            'username'  => $this->getUsername(),
+            'password'  => $this->getPassword(),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => config('tenants.DB_TABLES_PREFIX'),
         ]);
 
         if ($shouldConnect) {
+            $this->disconnect();
             $this->connect();
         }
         return $this;
@@ -57,5 +57,24 @@ class RVConnection {
     public function connect()
     {
         DB::setDefaultConnection($this->connectionName);
+    }
+
+    public function disconnect()
+    {
+        $connection = DB::connection($this->databaseName);
+        if (! $connection || $connection->getConfig('username') == $this->getUsername()) return;
+        DB::disconnect($this->databaseName);
+    }
+
+    protected function getUsername() {
+        return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_USERNAME') : config('tenants.DB_USERNAME');
+    }
+
+    protected function getHost() {
+        return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_HOST') : config('tenants.DB_HOST');
+    }
+
+    protected function getPassword() {
+        return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_PASSWORD') : config('tenants.DB_PASSWORD');
     }
 }
