@@ -62,7 +62,7 @@ class RVConnection {
     public function disconnect()
     {
         $connection = DB::connection($this->databaseName);
-        if (! $connection || $connection->getConfig('username') == $this->getUsername()) return;
+        if (! $connection || ($connection->getConfig('host') == $this->getHost() && $connection->getConfig('username') == $this->getUsername()) ) return;
         DB::disconnect($this->databaseName);
     }
 
