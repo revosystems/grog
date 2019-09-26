@@ -36,16 +36,15 @@ class RVConnection {
 
     public function create($shouldConnect = false){
         if (! $this->databaseName) return;
-        Config::set('database.connections.'.$this->connectionName, [
+
+        $config = array_merge(config('database.connections.mysql'),[
             'driver'    => App::environment('testing') ? 'sqlite' : 'mysql',
             'database'  => $this->getDatabase(),
             'host'      => $this->getHost(),
             'username'  => $this->getUsername(),
             'password'  => $this->getPassword(),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => config('tenants.DB_TABLES_PREFIX'),
         ]);
+        Config::set('database.connections.'.$this->connectionName, $config);
 
         if ($shouldConnect) {
             $this->disconnect();
