@@ -23,6 +23,9 @@ trait SyncTrait{
     }
 
     public static function sync($fromDate = '', $skip = null, $take = null){
+        if ($fromDate === '') {
+            $fromDate = date("Y-m-d H:i:s",0);
+        }
         $instance    = new static;
         $newQuery    = static::getNewSyncQuery($fromDate, $instance);
         $updateQuery = static::getUpdatedSyncQuery($fromDate, $instance);
@@ -34,7 +37,7 @@ trait SyncTrait{
             $deleteQuery = $deleteQuery->skip($skip)->take($take);
         }
 
-        if($fromDate == ''){
+        if(strtotime($fromDate) == 0){
             return array(
                 'new'       => $newQuery->get()->toArray(),
                 'updated'   => null,
