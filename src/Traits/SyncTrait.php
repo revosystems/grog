@@ -37,7 +37,7 @@ trait SyncTrait{
             $deleteQuery = $deleteQuery->skip($skip)->take($take);
         }
 
-        if(strtotime($fromDate == 0)){
+        if(strtotime($fromDate) == 0){
             return array(
                 'new'       => $newQuery->get()->toArray(),
                 'updated'   => null,
