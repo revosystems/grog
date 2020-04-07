@@ -2,10 +2,11 @@
     "name": "badchoice/grog",
     "description": "Easy form builder from array",
     "require": {
-        "php": ">=5.4.0",
-        "laravelcollective/html": ">=5.4.0",
+        "php": "^7.2.5",
         "khill/fontawesomephp" : "1.1.x",
-        "goodby/csv": "1.2.0"
+        "goodby/csv": "1.2.0",
+        "laravelcollective/html": "^6.1",
+        "laravel/framework": "^7.4"
     },
     "authors": [
         {
