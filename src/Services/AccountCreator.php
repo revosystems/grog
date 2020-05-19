@@ -60,6 +60,7 @@ class AccountCreator{
             'language'      => $this->language,
         ];
         $userClass  = config('tenants.user');
+        $userClass::$avoidExtraMigrations = true;
         $this->user = $userClass::create(array_merge( $newArray, $extraFields) );
     }
 
