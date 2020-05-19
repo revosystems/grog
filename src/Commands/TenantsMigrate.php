@@ -44,7 +44,7 @@ class TenantsMigrate extends BaseTenantsCommand
     protected function handleTenant($tenant)
     {
         $class = config('tenants.user');
-        createDBConnection($tenant);
+        createDBConnection($tenant, true);
         if ($this->option('rollback')) {
             return $class::rollback($tenant);
         }
