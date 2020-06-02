@@ -2,6 +2,8 @@
 
 namespace BadChoice\Grog\Services;
 
+use Illuminate\Support\Str;
+
 class ResourceRoute
 {
     protected $prefix = '';
@@ -59,7 +61,7 @@ class ResourceRoute
         return ltrim(collect([
             //rtrim(config('resourceRoute.admin_prefix'),'/'),      //Laravel 5.2
             //lcfirst($namespace->first()),                         //Laravel 5.2
-            lcfirst(str_plural($namespace->last()))
+            lcfirst(Str::plural($namespace->last()))
         ])->implode($separator), '.');
     }
 
@@ -73,7 +75,7 @@ class ResourceRoute
         return ltrim(collect([
             rtrim(config('resourceRoute.admin_prefix'), '/'),      //Laravel 5.2
             lcfirst($namespace->first()),                         //Laravel 5.2
-            lcfirst(str_plural($namespace->last())),
+            lcfirst(Str::plural($namespace->last())),
         ])->implode('/'), '.');
     }
 
@@ -83,7 +85,7 @@ class ResourceRoute
         return ltrim(collect([
             //rtrim(config('resourceRoute.admin_prefix'),'/'),      //Laravel 5.2
             //lcfirst($namespace->first()),                         //Laravel 5.2
-            lcfirst(str_plural($namespace->last())),
+            lcfirst(Str::plural($namespace->last())),
         ])->implode($separator), '.');
     }
 
