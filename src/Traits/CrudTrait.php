@@ -4,6 +4,7 @@ namespace BadChoice\Grog\Traits;
 
 use BadChoice\Grog\Services\ResourceRoute;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 trait CrudTrait
 {
@@ -53,7 +54,7 @@ trait CrudTrait
      */
     public function index()
     {
-        $model  = ucfirst(str_singular(resourceName()));
+        $model  = ucfirst(Str::singular(resourceName()));
         $class  = $this->getModelClassFromRoute();
         return view($this->viewPrefix . resourcePrefix(), ["data" => $class::all(), "model" => $model ]);
     }
@@ -94,7 +95,7 @@ trait CrudTrait
      */
     public function show($id)
     {
-        $resource = str_singular(resourceName());
+        $resource = Str::singular(resourceName());
         $viewPath = collect(explode('/', request()->path()))->slice(0, -2)->implode('.') . '.'.$resource;
         return view($this->viewPrefix . $viewPath, ["object" => $this->getObjectFromRoute($id), "model" => ucfirst($resource) ]);
     }
@@ -165,7 +166,7 @@ trait CrudTrait
     //====================================================================================================
     protected function getModelClassFromRoute()
     {
-        $model = ucfirst(str_singular(resourceName()));
+        $model = ucfirst(Str::singular(resourceName()));
         return static::getNamespaceForModel($model);
     }
 

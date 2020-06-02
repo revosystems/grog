@@ -6,7 +6,8 @@
         "khill/fontawesomephp" : "1.1.x",
         "goodby/csv": "1.2.0",
         "laravelcollective/html": "^6.1",
-        "laravel/framework": "^7.4"
+        "laravel/framework": "^7.4",
+        "laravel/helpers": "^1.2"
     },
     "authors": [
         {
