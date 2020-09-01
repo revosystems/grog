@@ -1,6 +1,6 @@
 <?php
 
-Html::macro("configForm", function($type, $model, $field, $showDesc = false, $selectArray = null, $multiple = false){
+Html::macro("configForm", function($type, $model, $field, $showDesc = false, $selectArray = null, $multiple = false, $camelCase = true){
 
     if      ($type == "text")               $b = Form::text     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
     else if ($type == "textarea")           $b = Form::textarea ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
@@ -30,7 +30,8 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
     }
 
     echo "<div class='label'>";
-    $a = Form::label($field.'Label',  trans_choice('admin.'.camel_case(str_replace("_id","",$field)),1));
+    $label = $camelCase ? camel_case(str_replace("_id","",$field)) : str_replace("_id","",$field);
+    $a = Form::label($field.'Label',  trans_choice('admin.'.$label,1));
     echo $a;
     echo "</div><div class='field''>";
     echo $b;
@@ -38,6 +39,10 @@ Html::macro("configForm", function($type, $model, $field, $showDesc = false, $se
         echo "<br><p>". trans('admin.'.$field.'Desc') . "</p>";
     }
     echo"</div>";
+});
+
+Html::macro("configFormNoCamelCase", function($type, $model, $field, $showDesc = false){
+    return Html::configForm($type, $model, $field, $showDesc, null, false, false);
 });
 
 /**
