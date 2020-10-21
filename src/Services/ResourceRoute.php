@@ -32,17 +32,17 @@ class ResourceRoute
 
     public static function link_to_show($object, $title = null, $attributes = null)
     {
-        return link_to(route(object_route($object). '.show', $object->id), $title, ['id' => $object->id], $attributes);
+        return link_to(route(object_route($object). '.show', $object->id), $title, array_merge(['id' => $object->id], $attributes));
     }
 
     public static function link_to_edit($object)
     {
-        return link_to(route(object_route($object) . '.edit', $object->id), '', ['id' => $object->id], ['class' => 'showPopup edit']) ;
+        return link_to(route(object_route($object) . '.edit', $object->id), '', ['id' => $object->id, 'class' => 'showPopup edit']) ;
     }
 
     public static function link_to_delete($object)
     {
-        return link_to(route(object_route($object) . '.destroy', $object->id), '', ['id' => $object->id], ['class' => 'delete-resource', 'data-delete' => 'confirm resource']) ;
+        return link_to(route(object_route($object) . '.destroy', $object->id), '', ['id' => $object->id, 'class' => 'delete-resource', 'data-delete' => 'confirm resource']) ;
     }
 
     public static function route_to_update()
