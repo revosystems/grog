@@ -32,7 +32,7 @@ class ResourceRoute
 
     public static function link_to_show($object, $title = null, $attributes = null)
     {
-        return link_to(route(object_route($object). '.show', $object->id), $title, array_merge(['id' => $object->id], $attributes));
+        return link_to(route(object_route($object). '.show', $object->id), $title, array_merge(['id' => $object->id], $attributes ?? []));
     }
 
     public static function link_to_edit($object)
