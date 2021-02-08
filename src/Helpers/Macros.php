@@ -1,19 +1,19 @@
 <?php
 
-Html::macro("configForm", function($type, $model, $field, $showDesc = false, $selectArray = null, $multiple = false, $camelCase = true){
-
-    if      ($type == "text")               $b = Form::text     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "textarea")           $b = Form::textarea ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "email")              $b = Form::email    ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "date")               $b = Form::date     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "time")               $b = Form::time     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "timeWithSeconds")    $b = Form::time     ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field, 'step' => '1']);
-    else if ($type == "url")                $b = Form::url      ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "number")             $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
-    else if ($type == "decimal")            $b = Form::number   ($field, $model->$field,        ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field, 'step' => 'any']);
+Html::macro("configForm", function($type, $model, $field, $showDesc = false, $selectArray = null, $multiple = false, $camelCase = true, $extraAttributes = []){
+    $defaultAttributes = ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field];
+    if      ($type == "text")               $b = Form::text     ($field, $model->$field,        array_merge($defaultAttributes,$extraAttributes));
+    else if ($type == "textarea")           $b = Form::textarea ($field, $model->$field,        array_merge($defaultAttributes,$extraAttributes));
+    else if ($type == "email")              $b = Form::email    ($field, $model->$field,        array_merge($defaultAttributes,$extraAttributes));
+    else if ($type == "date")               $b = Form::date     ($field, $model->$field,        array_merge($defaultAttributes,$extraAttributes));
+    else if ($type == "time")               $b = Form::time     ($field, $model->$field,        array_merge($defaultAttributes,$extraAttributes));
+    else if ($type == "timeWithSeconds")    $b = Form::time     ($field, $model->$field,        array_merge($defaultAttributes, ['step' => '1'], $extraAttributes));
+    else if ($type == "url")                $b = Form::url      ($field, $model->$field,        array_merge($defaultAttributes,$extraAttributes));
+    else if ($type == "number")             $b = Form::number   ($field, $model->$field,        array_merge($defaultAttributes,$extraAttributes));
+    else if ($type == "decimal")            $b = Form::number   ($field, $model->$field,        array_merge($defaultAttributes, ['step' => 'any'], $extraAttributes));
     else if ($type == "color")      {
         $b =  Form::color   ($field, $model->$field,       ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => 'colorpicker']);
-        $b .= Form::text    ($field, $model->$field,       ['placeholder' => trans_choice('admin.'.$field,1) , 'id' => $field]);
+        $b .= Form::text    ($field, $model->$field,       array_merge($defaultAttributes,$extraAttributes));
     }
 
     else if ($type == "select" && !$multiple)     $b = Form::select   ($field, $selectArray, $model->$field, ['id' => $field]);
