@@ -24,10 +24,11 @@ class FormBuilder{
             $field      = isset($formItem["field"])     ?$formItem["field"]     : $formItem;
             $select     = isset($formItem["select"])    ?$formItem["select"]    : null;
             $multiple   = isset($formItem["multiple"])  ?$formItem["multiple"]    : null;
+            $extraAttributes   = isset($formItem["extraAttributes"])  ?$formItem["extraAttributes"]   : [];
 
             if($select  )       { echo Html::configForm('select', $object, $field, $showDesc, $select);         }
             else if($multiple)  { echo Html::configForm('select', $object, $field, $showDesc, $multiple, true);   }
-            else                { echo Html::configForm($type, $object, $field, $showDesc);                     }
+            else                { echo Html::configForm($type, $object, $field, $showDesc, null, false, true, $extraAttributes);                     }
         }
         echo '</div>';
     }
