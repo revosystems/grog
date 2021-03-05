@@ -125,7 +125,7 @@ trait CrudTrait
     {
         $this->validate($request, $this->getValidationRules($id));
         try {
-            $object = $this->updateOrCreateObject($id);
+            $object = $this->updateOrCreateObject($request, $id);
         } catch (\Exception $e) {
             return $this->respondError($e->getMessage());
         }
@@ -170,7 +170,7 @@ trait CrudTrait
         return $class::findOrFail($id);
     }
 
-    protected function updateOrCreateObject($id)
+    protected function updateOrCreateObject($request, $id)
     {
         if ($id) {
             $object = $this->getObjectFromRoute($id);
