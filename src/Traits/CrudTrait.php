@@ -125,13 +125,7 @@ trait CrudTrait
     {
         $this->validate($request, $this->getValidationRules($id));
         try {
-            if ($id) {
-                $object = $this->getObjectFromRoute($id);
-                $object->update(setNullOnEmptyStrings($request->all()));
-            } else {
-                $class  = $this->getModelClassFromRoute();
-                $object = $class::create(setNullOnEmptyStrings($request->all()));
-            }
+            $object = $this->updateOrCreateObject($id);
         } catch (\Exception $e) {
             return $this->respondError($e->getMessage());
         }
@@ -174,6 +168,18 @@ trait CrudTrait
     {
         $class = $this->getModelClassFromRoute();
         return $class::findOrFail($id);
+    }
+
+    protected function updateOrCreateObject($id)
+    {
+        if ($id) {
+            $object = $this->getObjectFromRoute($id);
+            $object->update(setNullOnEmptyStrings($request->all()));
+        } else {
+            $class  = $this->getModelClassFromRoute();
+            $object = $class::create(setNullOnEmptyStrings($request->all()));
+        }
+        return $object;
     }
 
     protected function respondOk($data, $message = "Ok")
