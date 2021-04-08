@@ -31,7 +31,7 @@ class RVConnection {
 
     private function getDatabase(){
         $prefix = config('tenants.DB_TENANTS_PREFIX');
-        return App::environment('testing') ? ':memory:' : $prefix.$this->databaseName;
+        return App::environment('testing') ? config('database.connections.'.config('database.default').'.database', ':memory:') : $prefix.$this->databaseName;
     }
 
     public function create($shouldConnect = false){
