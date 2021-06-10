@@ -10,6 +10,9 @@ trait CrudTrait
 {
     protected $viewPrefix = '';
     protected $editPage   = 'admin.common.edit';
+    protected $indexWith = [];
+    protected $showWith = [];
+    protected $editWith = [];
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +59,7 @@ trait CrudTrait
     {
         $model  = ucfirst(Str::singular(resourceName()));
         $class  = $this->getModelClassFromRoute();
-        return view($this->viewPrefix . resourcePrefix(), ["data" => $class::all(), "model" => $model ]);
+        return view($this->viewPrefix . resourcePrefix(), ["data" => $class::with($this->indexWith)->get(), "model" => $model ]);
     }
 
     /**
@@ -97,7 +100,7 @@ trait CrudTrait
     {
         $resource = Str::singular(resourceName());
         $viewPath = collect(explode('/', request()->path()))->slice(0, -2)->implode('.') . '.'.$resource;
-        return view($this->viewPrefix . $viewPath, ["object" => $this->getObjectFromRoute($id), "model" => ucfirst($resource) ]);
+        return view($this->viewPrefix . $viewPath, ["object" => $this->getObjectFromRoute($id, $this->showWith), "model" => ucfirst($resource) ]);
     }
 
     /**
@@ -108,7 +111,7 @@ trait CrudTrait
      */
     public function edit($id)
     {
-        $object             = $this->getObjectFromRoute($id);
+        $object             = $this->getObjectFromRoute($id, $this->editWith);
         $formConfig         = $this->getFormConfig($object);
         $validationRules    = $this->getValidationRules($id);
         return view($this->editPage, compact('object', 'formConfig', 'validationRules'));
@@ -164,10 +167,10 @@ trait CrudTrait
         return static::getNamespaceForModel($model);
     }
 
-    protected function getObjectFromRoute($id)
+    protected function getObjectFromRoute($id, $with = [])
     {
         $class = $this->getModelClassFromRoute();
-        return $class::findOrFail($id);
+        return $class::with($with)->findOrFail($id);
     }
 
     protected function updateOrCreateObject($request, $id)
