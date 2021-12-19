@@ -2,7 +2,7 @@
     "name": "revosystems/grog",
     "description": "Easy form builder from array",
     "require": {
-        "php": "^7.3",
+        "php": "^8.1",
         "khill/fontawesomephp" : "1.1.x",
         "goodby/csv": "1.2.0",
         "laravelcollective/html": "^6.1",
