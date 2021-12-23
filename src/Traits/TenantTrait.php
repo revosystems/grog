@@ -48,7 +48,11 @@ trait TenantTrait
     public static function rollback($username)
     {
         foreach (config('tenants.migration_paths') as $path) {
-            Artisan::call('migrate:rollback', array('--database' => $username, '--force' =>true));
+            Artisan::call('migrate:rollback', [
+                '--database' => $username, 
+                '--force' => true,
+                '--path' => $path,
+            ]);
         }
     }
 
