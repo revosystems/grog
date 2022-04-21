@@ -11,7 +11,7 @@ trait SaveNestedTrait{
     {
         $toSaveNested = [];
         foreach ($nestedArray as $key => $value) {
-            if (static::isRelation($key) ) {
+            if (static::isKeyARelation($key) ) {
                 if($value != null) {
                     $toSaveNested[$key] = $value;
                 }
@@ -45,7 +45,7 @@ trait SaveNestedTrait{
         return $object;
     }
 
-    public static function isRelation($key){
+    public static function isKeyARelation($key){
         $object = new static();
         return  method_exists( $object, $key) && ($object->$key() instanceof Relation);
     }
