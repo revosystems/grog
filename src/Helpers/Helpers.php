@@ -125,7 +125,7 @@ function nameOrDash($object){
 }
 
 function icon($icon) {
-    return FA::fixedWidth($icon);
+    return FA::fixedWidth($icon)->addClass('fa');
 }
 
 function r_collect($array){
