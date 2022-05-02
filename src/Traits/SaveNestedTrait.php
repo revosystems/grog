@@ -2,6 +2,7 @@
 
 namespace BadChoice\Grog\Traits;
 
+use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
@@ -35,10 +36,16 @@ trait SaveNestedTrait
             $relation = $object->$relationMethodName();
             $relatedModel = $relation->getRelated();
             $foreignKey = $relation->getForeignKeyName();
+            $foreignKeyType = $relation instanceof MorphOneOrMany
+                ? $relation->getMorphType()
+                : null;
 
             $contents = is_array($contents) ? $contents : [$contents];
             foreach ($contents as $content) {
                 $content->$foreignKey = $object->id;
+                if ($foreignKeyType) {
+                    $content->$foreignKeyType = get_class($object);
+                }
                 $relatedModel::saveNested((array) $content, $createIfNotFound);
             }
         }
