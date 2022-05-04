@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30daefbacb7d48dd3cbfa8f9e9e1986e",
+    "content-hash": "2390a0fcd102432d3de07ca8fe2d477b",
     "packages": [
         {
             "name": "brick/math",
@@ -559,59 +559,6 @@
                 }
             ],
             "time": "2021-11-21T21:41:47+00:00"
-        },
-        {
-            "name": "khill/fontawesomephp",
-            "version": "2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kevinkhill/FontAwesomePHP.git",
-                "reference": "324fdac57c319f7212d4be2e47f1d03c3f015e1a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kevinkhill/FontAwesomePHP/zipball/324fdac57c319f7212d4be2e47f1d03c3f015e1a",
-                "reference": "324fdac57c319f7212d4be2e47f1d03c3f015e1a",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.8",
-                "satooshi/php-coveralls": "~1.0",
-                "squizlabs/php_codesniffer": "~2.5"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Khill\\FontAwesome\\Laravel\\FontAwesomeServiceProvider"
-                    ],
-                    "aliases": {
-                        "FA": "Khill\\FontAwesome\\Laravel\\FontAwesomeFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Khill\\FontAwesome\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kevin Hill",
-                    "email": "kevinkhill@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP wrapper library for the fantastic Font Awesome icon set.",
-            "support": {
-                "issues": "https://github.com/kevinkhill/FontAwesomePHP/issues",
-                "source": "https://github.com/kevinkhill/FontAwesomePHP/tree/2.0"
-            },
-            "time": "2018-06-19T17:27:46+00:00"
         },
         {
             "name": "laravel/framework",
@@ -4707,5 +4654,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.0.0"
 }
