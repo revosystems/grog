@@ -1,52 +1,60 @@
-<?php namespace BadChoice\Grog\Traits;
+<?php
+
+namespace BadChoice\Grog\Traits;
+
+use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * Class SaveNestedTrait
  * @package BadChoice\Grog\Traits
  */
-trait SaveNestedTrait{
-
-    public static function saveNested(array $nestedArray, $createIfNotFound = false)
+trait SaveNestedTrait
+{
+    public static function saveNested(array $nestedArray, bool $createIfNotFound = false)
     {
         $toSaveNested = [];
-        foreach ($nestedArray as $key => $value) {
-            if (static::isKeyARelation($key) ) {
-                if($value != null) {
-                    $toSaveNested[$key] = $value;
+        foreach ($nestedArray as $relationMethodName => $value) {
+            if (static::isARelationMethod($relationMethodName)) {
+                if ($value != null) {
+                    $toSaveNested[$relationMethodName] = $value;
                 }
-                unset($nestedArray[$key]);
+                unset($nestedArray[$relationMethodName]);
             }
         }
         if (isset($nestedArray['id']) && $nestedArray['id']) {
-            $object = static::find($nestedArray['id']);
-            if($object)                 $object->update($nestedArray);
-            else if($createIfNotFound)  $object = static::create($nestedArray);
+            if ($object = static::find($nestedArray['id'])) {
+                $object->update($nestedArray);
+            } else if ($createIfNotFound) {
+                $object = static::create($nestedArray);
+            }
         } else {
             $object = static::create($nestedArray);
         }
 
-        foreach ($toSaveNested as $key => $array) {
-            $relatedModel = $object->$key()->getRelated();
-            $foreignKey   = $object->$key()->getForeignKeyName();
+        foreach ($toSaveNested as $relationMethodName => $contents) {
+            $relation = $object->$relationMethodName();
+            $relatedModel = $relation->getRelated();
+            $foreignKey = $relation->getForeignKeyName();
+            $foreignKeyType = $relation instanceof MorphOneOrMany
+                ? $relation->getMorphType()
+                : null;
 
-
-            if(is_array($array)) {
-                foreach ($array as $content) {
-                    $content->$foreignKey = $object->id;
-                    $relatedModel::saveNested((array)$content, $createIfNotFound);
+            $contents = is_array($contents) ? $contents : [$contents];
+            foreach ($contents as $content) {
+                $content->$foreignKey = $object->id;
+                if ($foreignKeyType) {
+                    $content->$foreignKeyType = get_class($object);
                 }
-            }
-            else{
-                $array->$foreignKey = $object->id;
-                $relatedModel::saveNested((array)$array, $createIfNotFound);
+                $relatedModel::saveNested((array) $content, $createIfNotFound);
             }
         }
         return $object;
     }
 
-    public static function isKeyARelation($key){
+    public static function isARelationMethod(string $relationMethodName)
+    {
         $object = new static();
-        return  method_exists( $object, $key) && ($object->$key() instanceof Relation);
+        return  method_exists($object, $relationMethodName) && ($object->$relationMethodName() instanceof Relation);
     }
 }
