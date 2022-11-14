@@ -41,6 +41,10 @@ trait SaveNestedTrait
                 : null;
 
             $contents = is_array($contents) ? $contents : [$contents];
+
+            if (static::isAnOverwritableMethodRelation($relationMethodName)) {
+                $object->$relationMethodName()->delete();
+            }
             foreach ($contents as $content) {
                 $content->$foreignKey = $object->id;
                 if ($foreignKeyType) {
@@ -52,9 +56,15 @@ trait SaveNestedTrait
         return $object;
     }
 
-    public static function isARelationMethod(string $relationMethodName)
+    public static function isARelationMethod(string $relationMethodName): bool
     {
         $object = new static();
         return  method_exists($object, $relationMethodName) && ($object->$relationMethodName() instanceof Relation);
+    }
+
+    public static function isAnOverwritableMethodRelation(string $relationMethodName): bool
+    {
+        $object = new static();
+        return in_array($relationMethodName, $object->overwritableRelations ?? []);
     }
 }
