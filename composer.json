@@ -5,7 +5,7 @@
         "php": "^8.1",
         "goodby/csv": "1.2.0",
         "laravelcollective/html": "^6.1",
-        "laravel/framework": "8.x",
+        "laravel/framework": "8.x|9.x",
         "laravel/helpers": "^1.2"
     },
     "authors": [
