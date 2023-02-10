@@ -3,7 +3,6 @@
 use Collective\Html\HtmlServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
-use Khill\FontAwesome\Laravel\FontAwesomeServiceProvider;
 
 class GrogServiceProvider extends ServiceProvider
 {
@@ -32,7 +31,6 @@ class GrogServiceProvider extends ServiceProvider
 
     public function register(){
         $this->app->register(HtmlServiceProvider::class);
-        $this->app->register(FontAwesomeServiceProvider::class);
         $this->mergeConfigFrom(__DIR__ . '/../config/tenants.php', 'tenants');
     }
 }
