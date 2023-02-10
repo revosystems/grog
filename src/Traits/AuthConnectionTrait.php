@@ -1,7 +1,11 @@
-<?php namespace BadChoice\Grog\Traits;
+<?php
 
-trait AuthConnectionTrait{
-    public function getConnectionName(){
-        return env('DB_AUTH_CONNECTION','mysql');
+namespace BadChoice\Grog\Traits;
+
+trait AuthConnectionTrait
+{
+    public function getConnectionName()
+    {
+        return config('tenants.db.connection');
     }
 }

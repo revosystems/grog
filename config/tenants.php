@@ -6,6 +6,10 @@ return [
     "DB_USERNAME"       => env('DB_USERNAME'    ,'root'),
     "DB_PASSWORD"       => env('DB_PASSWORD'    ,''),
 
+    'db' => [
+        'connection' => env('DB_AUTH_CONNECTION', 'mysql'),
+    ],
+
     "migration_paths" => [
         "database/migrations/tenants",
         "database/migrations/tenants/stocks",

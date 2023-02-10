@@ -42,7 +42,7 @@ class ResourceRoute
 
     public static function link_to_delete($object)
     {
-        return link_to(route(object_route($object) . '.destroy', $object->id), '', ['id' => $object->id, 'class' => 'delete-resource', 'data-delete' => 'confirm resource']) ;
+        return link_to(route(object_route($object) . '.destroy', $object->id), '', ['id' => $object->id, 'class' => 'delete-resource', 'data-delete' => 'confirm resource', 'confirm-message' => __('admin.confirmDelete')]) ;
     }
 
     public static function route_to_update()
