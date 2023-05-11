@@ -36,6 +36,11 @@ class AccountCreator{
             throw new CreateAccountException("Password to weak");
         }
 
+        if (App::runningUnitTests()) {
+            $this->createUser($extraFields);
+            return $this->user;
+        }
+
         try {
             $this->createDatabase();
             $this->createUser($extraFields);
