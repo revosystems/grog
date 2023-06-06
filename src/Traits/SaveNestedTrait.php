@@ -26,7 +26,12 @@ trait SaveNestedTrait
             if ($object = static::find($nestedArray['id'])) {
                 $object->update($nestedArray);
             } else if ($createIfNotFound) {
-                $object = static::create($nestedArray);
+                $object = static::withTrashed()->updateOrCreate([
+                    'id' => $nestedArray['id'],
+                ], [
+                    'deleted_at' => null,
+                    ...$nestedArray
+                ]);
             }
         } else {
             $object = static::create($nestedArray);
