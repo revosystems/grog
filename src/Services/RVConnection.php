@@ -32,7 +32,7 @@ class RVConnection {
     }
 
     public function atInstance($instanceName) {
-        $this->dbInstanceName = $instanceName;
+        $this->dbInstance = $instanceName;
         return $this;
     }
 
