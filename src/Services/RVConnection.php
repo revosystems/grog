@@ -12,6 +12,8 @@ class RVConnection {
     protected $databaseName;
     protected $connectionName;
 
+    protected $dbInstance;
+
     public function __construct($database)
     {
         $this->databaseName = $database;
@@ -26,6 +28,11 @@ class RVConnection {
     public function useReportsDatabase($useReportsDatabase = true)
     {
         $this->useReportsDatabase = $useReportsDatabase;
+        return $this;
+    }
+
+    public function atInstance($instanceName) {
+        $this->dbInstanceName = $instanceName;
         return $this;
     }
 
@@ -70,6 +77,9 @@ class RVConnection {
     }
 
     protected function getHost() {
+        if ($this->dbInstance) {
+            return config('tenants.DB_INSTANCES.'.$this->dbInstance . '.' . ($this->useReportsDatabase ? 'reports' : 'main'));
+        }
         return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_HOST') : config('tenants.DB_HOST');
     }
 
