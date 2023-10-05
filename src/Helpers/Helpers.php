@@ -13,17 +13,13 @@ use Illuminate\Support\Facades\Config;
  * @param $shouldConnect
  * @param bool $reports true to connect to the read only database insatance
  */
-function createDBConnection(string|\BadChoice\Grog\Services\ProvidesDatabaseConnection $object, $shouldConnect = false, $reports = false) {
-    if (is_string($object)){
-        if ($provider = RVConnection::$provider){
-            $object = $provider::databaseConnectionProviderByName($object);
-        } else {
-            return (new RVConnection($user))->useReportsDatabase($reports)->create($shouldConnect);
-        }
+function createDBConnection(string|\BadChoice\Grog\Services\ProvidesDatabaseConnection $object, bool $shouldConnect = false, bool $reports = false) {
+    if (is_string($object) && RVConnection::$provider) {
+        $object = RVConnection::$provider::databaseConnectionProviderByName($object);
     }
 
-    (new RVConnection($object->getDatabaseName()))
-        ->atInstance($object->getDatabaseInstance())
+    return (new RVConnection($object instanceof ProvidesDatabaseConnection ? $object->getDatabaseName() : $object))
+        ->atInstance($object instanceof ProvidesDatabaseConnection ? $object->getDatabaseInstance() : null)
         ->useReportsDatabase($reports)
         ->create($shouldConnect);
 }
