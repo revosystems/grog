@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class RVConnection {
 
+    static string $provider;
     protected $useReportsDatabase   = false;
     protected $databaseName;
     protected $connectionName;
