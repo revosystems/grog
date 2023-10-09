@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class RVConnection {
 
-    protected $useReportsDatabase   = false;
-    protected $databaseName;
-    protected $connectionName;
+    protected bool $useReportsDatabase   = false;
+    protected string $databaseName;
+    protected string $connectionName;
 
-    protected $dbInstance;
+    protected ?string $dbInstance;
 
     public function __construct($database)
     {
@@ -31,7 +31,7 @@ class RVConnection {
         return $this;
     }
 
-    public function atInstance($instanceName) {
+    public function atInstance(?string $instanceName) {
         $this->dbInstance = $instanceName;
         return $this;
     }
