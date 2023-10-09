@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class RVConnection {
 
+    static ?string $provider;
+
     protected bool $useReportsDatabase   = false;
     protected string $databaseName;
     protected string $connectionName;
-
     protected ?string $dbInstance;
 
     public function __construct($database)
