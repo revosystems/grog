@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 class RVConnection {
 
-    protected $useReportsDatabase   = false;
-    protected $databaseName;
-    protected $connectionName;
+    static ?string $provider;
+
+    protected bool $useReportsDatabase   = false;
+    protected string $databaseName;
+    protected string $connectionName;
+    protected ?string $dbInstance;
 
     public function __construct($database)
     {
@@ -26,6 +29,11 @@ class RVConnection {
     public function useReportsDatabase($useReportsDatabase = true)
     {
         $this->useReportsDatabase = $useReportsDatabase;
+        return $this;
+    }
+
+    public function atInstance(?string $instanceName) {
+        $this->dbInstance = $instanceName;
         return $this;
     }
 
@@ -70,6 +78,9 @@ class RVConnection {
     }
 
     protected function getHost() {
+        if ($this->dbInstance) {
+            return config('tenants.DB_INSTANCES.'.$this->dbInstance . '.' . ($this->useReportsDatabase ? 'reports' : 'main'));
+        }
         return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_HOST') : config('tenants.DB_HOST');
     }
 
