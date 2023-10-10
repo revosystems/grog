@@ -79,12 +79,15 @@ class RVConnection {
 
     protected function getHost() {
         if ($this->dbInstance) {
-            return config('tenants.DB_INSTANCES.'.$this->dbInstance . '.' . ($this->useReportsDatabase ? 'reports' : 'main'));
+            return config('tenants.DB_INSTANCES.'.$this->dbInstance . '.' . ($this->useReportsDatabase ? 'reports' : 'main'). '.host');
         }
         return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_HOST') : config('tenants.DB_HOST');
     }
 
     protected function getPassword() {
+        if ($this->dbInstance) {
+            return config('tenants.DB_INSTANCES.'.$this->dbInstance . '.' . ($this->useReportsDatabase ? 'reports' : 'main'). '.password');
+        }
         return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_PASSWORD') : config('tenants.DB_PASSWORD');
     }
 }
