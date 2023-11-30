@@ -45,19 +45,22 @@ class RVConnection {
     public function create($shouldConnect = false){
         if (! $this->databaseName) return;
 
-        $config = array_merge(config('database.connections.mysql'),[
+        $config = [
+            ...config('database.connections.mysql'),
             'driver'    => App::environment('testing') ? 'sqlite' : 'mysql',
             'database'  => $this->getDatabase(),
             'host'      => $this->getHost(),
             'username'  => $this->getUsername(),
             'password'  => $this->getPassword(),
-        ]);
-        Config::set('database.connections.'.$this->connectionName, $config);
+        ];
 
+        $currentConfig = Config::get('database.connections.'.$this->connectionName);
+        Config::set("database.connections.{$this->connectionName}", $config);
         if ($shouldConnect) {
-            $this->disconnect();
+            $this->disconnect($currentConfig);
             $this->connect();
         }
+
         return $this;
     }
 
@@ -66,10 +69,16 @@ class RVConnection {
         DB::setDefaultConnection($this->connectionName);
     }
 
-    public function disconnect()
+    public function disconnect(array $currentConfig = null)
     {
-        $connection = DB::connection($this->databaseName);
-        if (! $connection || ($connection->getConfig('host') == $this->getHost() && $connection->getConfig('username') == $this->getUsername()) ) return;
+        $currentConfig = $currentConfig ?? DB::connection($this->databaseName)?->getConfig();
+        if (empty($currentConfig)) {
+            return;
+        }
+
+        if ($currentConfig['host'] == $this->getHost() && $currentConfig['username'] == $this->getUsername()) {
+            return;
+        }
         DB::disconnect($this->databaseName);
     }
 
