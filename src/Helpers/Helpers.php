@@ -13,7 +13,7 @@ use BadChoice\Grog\Services\ProvidesDatabaseConnection;
  * @param $shouldConnect
  * @param bool $reports true to connect to the read only database insatance
  */
-function createDBConnection(string|ProvidesDatabaseConnection $object, $shouldConnect = false, $reports = false) {
+function createDBConnection(string|ProvidesDatabaseConnection $object, bool $shouldConnect = false, bool $reports = false) {
     if (is_string($object) && RVConnection::$provider) {
         $object = RVConnection::$provider::databaseConnectionProviderByName($object);
     }

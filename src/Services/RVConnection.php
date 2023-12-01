@@ -21,29 +21,35 @@ class RVConnection {
         $this->connectionName = $database;
     }
 
-    public function setConnectionName($connectionName){
+    public function setConnectionName($connectionName): self
+    {
         $this->connectionName = $connectionName;
         return $this;
     }
 
-    public function useReportsDatabase($useReportsDatabase = true)
+    public function useReportsDatabase($useReportsDatabase = true): self
     {
         $this->useReportsDatabase = $useReportsDatabase;
         return $this;
     }
 
-    public function atInstance(?string $instanceName) {
+    public function atInstance(?string $instanceName): self
+    {
         $this->dbInstance = $instanceName;
         return $this;
     }
 
-    private function getDatabase(){
+    private function getDatabase()
+    {
         $prefix = config('tenants.DB_TENANTS_PREFIX');
         return App::environment('testing') ? config('database.connections.'.config('database.default').'.database', ':memory:') : $prefix.$this->databaseName;
     }
 
-    public function create($shouldConnect = false){
-        if (! $this->databaseName) return;
+    public function create(bool $shouldConnect = false): self
+    {
+        if (! $this->databaseName) {
+            return $this;
+        }
 
         $config = [
             ...config('database.connections.mysql'),
@@ -56,7 +62,7 @@ class RVConnection {
 
         $currentConfig = Config::get('database.connections.'.$this->connectionName);
         Config::set("database.connections.{$this->connectionName}", $config);
-        if ($shouldConnect) {
+        if ($shouldConnect === true) {
             $this->disconnect($currentConfig);
             $this->connect();
         }
@@ -69,31 +75,37 @@ class RVConnection {
         DB::setDefaultConnection($this->connectionName);
     }
 
-    public function disconnect(array $currentConfig = null)
+    public function disconnect(array $currentConfig = null): void
     {
+        if (App::environment('testing')) {
+            return;
+        }
         $currentConfig = $currentConfig ?? DB::connection($this->databaseName)?->getConfig();
         if (empty($currentConfig)) {
             return;
         }
 
-        if ($currentConfig['host'] == $this->getHost() && $currentConfig['username'] == $this->getUsername()) {
+        if ($currentConfig['host'] === $this->getHost() && $currentConfig['username'] === $this->getUsername()) {
             return;
         }
         DB::disconnect($this->databaseName);
     }
 
-    protected function getUsername() {
+    protected function getUsername()
+    {
         return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_USERNAME') : config('tenants.DB_USERNAME');
     }
 
-    protected function getHost() {
+    protected function getHost()
+    {
         if ($this->dbInstance) {
             return config('tenants.DB_INSTANCES.'.$this->dbInstance . '.' . ($this->useReportsDatabase ? 'reports' : 'main'). '.host');
         }
         return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_HOST') : config('tenants.DB_HOST');
     }
 
-    protected function getPassword() {
+    protected function getPassword()
+    {
         if ($this->dbInstance) {
             return config('tenants.DB_INSTANCES.'.$this->dbInstance . '.' . ($this->useReportsDatabase ? 'reports' : 'main'). '.password');
         }
