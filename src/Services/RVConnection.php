@@ -56,12 +56,14 @@ class RVConnection {
             'driver'    => App::environment('testing') ? 'sqlite' : 'mysql',
             'database'  => $this->getDatabase(),
             'host'      => $this->getHost(),
+            'port'      => $this->getPort(),
             'username'  => $this->getUsername(),
             'password'  => $this->getPassword(),
         ];
 
-        $currentConfig = Config::get('database.connections.'.$this->connectionName);
-        Config::set("database.connections.{$this->connectionName}", $config);
+        $connection = "database.connections.{$this->connectionName}";
+        $currentConfig = Config::get($connection);
+        Config::set($connection, $config);
         if ($shouldConnect === true) {
             $this->disconnect($currentConfig);
             $this->connect();
@@ -85,7 +87,7 @@ class RVConnection {
             return;
         }
 
-        if ($currentConfig['host'] === $this->getHost() && $currentConfig['username'] === $this->getUsername()) {
+        if ($currentConfig['host'] === $this->getHost() && $currentConfig['port'] === $this->getPort() && $currentConfig['username'] === $this->getUsername()) {
             return;
         }
         DB::disconnect($this->databaseName);
@@ -93,22 +95,30 @@ class RVConnection {
 
     protected function getUsername()
     {
-        return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_USERNAME') : config('tenants.DB_USERNAME');
+        return $this->useReportsDatabase ? config('tenants.DB_REPORTS_USERNAME') : config('tenants.DB_USERNAME');
     }
 
     protected function getHost()
     {
         if ($this->dbInstance) {
-            return config('tenants.DB_INSTANCES.'.$this->dbInstance . '.' . ($this->useReportsDatabase ? 'reports' : 'main'). '.host');
+            return config("tenants.DB_INSTANCES.{$this->dbInstance}." . ($this->useReportsDatabase ? 'reports' : 'main'). '.host');
         }
-        return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_HOST') : config('tenants.DB_HOST');
+        return $this->useReportsDatabase ? config('tenants.DB_REPORTS_HOST') : config('tenants.DB_HOST');
+    }
+
+    protected function getPort()
+    {
+        if ($this->dbInstance) {
+            return config("tenants.DB_INSTANCES.{$this->dbInstance}." . ($this->useReportsDatabase ? 'reports' : 'main'). '.port');
+        }
+        return $this->useReportsDatabase ? config('tenants.DB_REPORTS_PORT') : config('tenants.DB_PORT');
     }
 
     protected function getPassword()
     {
         if ($this->dbInstance) {
-            return config('tenants.DB_INSTANCES.'.$this->dbInstance . '.' . ($this->useReportsDatabase ? 'reports' : 'main'). '.password');
+            return config("tenants.DB_INSTANCES.{$this->dbInstance}." . ($this->useReportsDatabase ? 'reports' : 'main'). '.password');
         }
-        return ($this->useReportsDatabase) ? config('tenants.DB_REPORTS_PASSWORD') : config('tenants.DB_PASSWORD');
+        return $this->useReportsDatabase ? config('tenants.DB_REPORTS_PASSWORD') : config('tenants.DB_PASSWORD');
     }
 }
