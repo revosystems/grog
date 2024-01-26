@@ -33,14 +33,6 @@ class TenantsMigrate extends BaseTenantsCommand
         return $this->option('force') || $this->confirm('Do you wish to continue?', false);
     }
 
-    protected function postHandle()
-    {
-        $this->info('Dump autoload');
-        exec('composer dump-autoload');
-        Artisan::call('optimize');
-        Artisan::call('queue:restart'); //To reload the code for queues (on daemon)
-    }
-
     protected function handleTenant($tenant)
     {
         $class = config('tenants.user');
