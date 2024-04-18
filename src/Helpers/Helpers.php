@@ -3,7 +3,7 @@
 use BadChoice\Grog\Services\RVConnection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
-
+use BadChoice\Grog\Services\ProvidesDatabaseConnection;
 /**
  * Creates a connection for the database of the $user
  * the name of the connection will be 'RevoRetail_{$user}'
@@ -13,8 +13,16 @@ use Illuminate\Support\Facades\Config;
  * @param $shouldConnect
  * @param bool $reports true to connect to the read only database insatance
  */
-function createDBConnection($user, $shouldConnect = false, $reports = false) {
-    app(RVConnection::class, ['database' => $user])->useReportsDatabase($reports)->create($shouldConnect);
+function createDBConnection(string|ProvidesDatabaseConnection $object, bool $shouldConnect = false, bool $reports = false) {
+    if (is_string($object) && RVConnection::$provider) {
+        $object = RVConnection::$provider::databaseConnectionProviderByName($object);
+    }
+
+    return
+        app(RVConnection::class, ['database' => $object instanceof ProvidesDatabaseConnection ? $object->getDatabaseName() : $object])
+            ->atInstance($object instanceof ProvidesDatabaseConnection ? $object->getDatabaseInstance() : null)
+            ->useReportsDatabase($reports)
+            ->create($shouldConnect);
 }
 
 /**
