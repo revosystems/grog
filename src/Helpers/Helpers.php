@@ -18,11 +18,14 @@ function createDBConnection(string|ProvidesDatabaseConnection $object, bool $sho
         $object = RVConnection::$provider::databaseConnectionProviderByName($object);
     }
 
-    return
-        app(RVConnection::class, ['database' => $object instanceof ProvidesDatabaseConnection ? $object->getDatabaseName() : $object])
-            ->atInstance($object instanceof ProvidesDatabaseConnection ? $object->getDatabaseInstance() : null)
-            ->useReportsDatabase($reports)
-            ->create($shouldConnect);
+    (new RVConnection($object instanceof ProvidesDatabaseConnection ? $object->getDatabaseName() : $object))
+        ->atInstance($object instanceof ProvidesDatabaseConnection ? $object->getDatabaseInstance() : null)
+        ->useReportsDatabase($reports)
+        ->create($shouldConnect);
+
+    if ($object) {
+        $object->onConnectionCreated();
+    }
 }
 
 /**
