@@ -132,7 +132,7 @@ function nameOrDash($object){
 }
 
 function icon($icon) {
-    return FA::fixedWidth($icon)->addClass('fa');
+    return '<i class="fa-solid fa-fw fa-' . $icon . '"></i>';
 }
 
 function r_collect($array){
