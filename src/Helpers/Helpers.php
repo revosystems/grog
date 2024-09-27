@@ -25,7 +25,7 @@ function createDBConnection(string|ProvidesDatabaseConnection $object, bool $sho
 }
 
 /**
- * Creates an array that can be the input of Html::configForm('select'...) from a collection
+ * Creates an array for selects from a collection
  *
  * @param $items the collection to create the array
  * @param bool $canBeNull set true if you want to allow a null value
@@ -45,7 +45,7 @@ function createSelectArray($items, $canBeNull = false ,$fieldName = 'name'){
 
 
 /**
- * Replaces empty strings for null of an array (useful after the Html::configForm('select'...) when selecting the null value)
+ * Replaces empty strings for null of an array
  * @param $array
  * @return mixed
  */

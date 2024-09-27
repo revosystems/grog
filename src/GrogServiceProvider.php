@@ -21,10 +21,6 @@ class GrogServiceProvider extends ServiceProvider
             __DIR__.'/../config/resourceRoute.php'  => config_path('resourceRoute.php'),
         ], 'config');
 
-        AliasLoader::getInstance()->alias('Form', 'Collective\Html\FormFacade');
-        AliasLoader::getInstance()->alias('Html', 'Collective\Html\HtmlFacade');
-
-        require_once __DIR__ . '/Helpers/Macros.php';
         require_once __DIR__ . '/Helpers/Helpers.php';
         require_once __DIR__ . '/Helpers/RouteHelpers.php';
     }
