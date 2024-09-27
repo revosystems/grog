@@ -25,7 +25,6 @@ class GrogServiceProvider extends ServiceProvider
     }
 
     public function register(){
-        $this->app->register(HtmlServiceProvider::class);
         $this->mergeConfigFrom(__DIR__ . '/../config/tenants.php', 'tenants');
     }
 }
