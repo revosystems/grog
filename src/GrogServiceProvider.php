@@ -1,6 +1,5 @@
 <?php namespace BadChoice\Grog;
 
-use Collective\Html\HtmlServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 
