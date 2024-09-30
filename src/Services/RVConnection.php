@@ -39,10 +39,9 @@ class RVConnection {
         return $this;
     }
 
-    private function getDatabase()
+    protected function getDatabase()
     {
-        $prefix = config('tenants.DB_TENANTS_PREFIX');
-        return App::environment('testing') ? config('database.connections.'.config('database.default').'.database', ':memory:') : $prefix.$this->databaseName;
+        return config('tenants.DB_TENANTS_PREFIX').$this->databaseName;
     }
 
     public function create(bool $shouldConnect = false): self
@@ -53,7 +52,7 @@ class RVConnection {
 
         $config = [
             ...config('database.connections.mysql'),
-            'driver'    => App::environment('testing') ? 'sqlite' : 'mysql',
+            'driver'    => $this->getDriver(),
             'database'  => $this->getDatabase(),
             'host'      => $this->getHost(),
             'port'      => $this->getPort(),
@@ -72,6 +71,10 @@ class RVConnection {
         return $this;
     }
 
+    protected function getDriver() : string {
+        return 'mysql';
+    }
+
     public function connect()
     {
         DB::setDefaultConnection($this->connectionName);
@@ -79,9 +82,6 @@ class RVConnection {
 
     public function disconnect(array $currentConfig = null): void
     {
-        if (App::environment('testing')) {
-            return;
-        }
         $currentConfig = $currentConfig ?? DB::connection($this->databaseName)?->getConfig();
         if (empty($currentConfig)) {
             return;
