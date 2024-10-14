@@ -155,7 +155,7 @@ trait CrudTrait
             }
         }
         $object->delete();
-        return $this->respondOk("ok", "Deleted");
+        return $this->respondOk($id, "Deleted");
     }
 
     //====================================================================================================
@@ -187,7 +187,7 @@ trait CrudTrait
 
     protected function respondOk($data, $message = "Ok")
     {
-        return request()->ajax() ? response()->json($data) : redirect()->back()->with(["message" => $message]);
+        return request()->ajax() ? response()->json($data) : redirect()->back()->with(['id' => $data, 'message' => $message]);
     }
 
     protected function respondError($message, $code = 422)
