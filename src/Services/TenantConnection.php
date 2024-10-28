@@ -33,8 +33,12 @@ class TenantConnection
         return $result;
     }
 
-    public function withLogin(): self
+    public function doLogin(bool $withLogin = false): self
     {
+        if ($withLogin === false) {
+            return $this;
+        }
+
         abort_if(! $this->connection instanceof Authenticatable, 500, 'Current connection does not implement Authenticatable');
 
         $this->previousLogin = auth()->user();
