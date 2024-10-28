@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 
-class TenantConnectionHelper
+class TenantConnection
 {
     protected ProvidesDatabaseConnection $connection;
     protected Closure $callback;
