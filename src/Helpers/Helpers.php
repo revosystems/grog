@@ -1,9 +1,9 @@
 <?php
 
-use BadChoice\Grog\Services\RVConnection;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
 use BadChoice\Grog\Services\ProvidesDatabaseConnection;
+use BadChoice\Grog\Services\RVConnection;
+use BadChoice\Grog\Services\TenantConnectionHelper;
+
 /**
  * Creates a connection for the database of the $user
  * the name of the connection will be 'RevoRetail_{$user}'
@@ -26,6 +26,14 @@ function createDBConnection(string|ProvidesDatabaseConnection $object, bool $sho
     if ($object) {
         $object->onConnectionCreated();
     }
+}
+
+function doOn($connection, $callback, $withLogin = false, bool $withSharedTables = false): mixed
+{
+    return app()->makeWith(TenantConnectionHelper::class, ['connection' => $connection, 'callback' => $callback])
+        ->withLogin($withLogin)
+        ->withSharedTables($withSharedTables)
+        ->handle();
 }
 
 /**
