@@ -2,25 +2,25 @@
 
 namespace BadChoice\Grog\Services;
 
+use Closure;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 
 class TenantConnectionHelper
 {
-    private ?Authenticatable $previousLogin = null;
-    private string $previousConnection;
-    private ProvidesDatabaseConnection|Authenticatable|null $user;
+    protected string|ProvidesDatabaseConnection $connection;
+    protected Closure $callback;
+    protected string $previousConnection;
+    protected ?Authenticatable $previousLogin = null;
+    protected bool $withLogin = false;
 
-    public function __construct(
-        protected string|ProvidesDatabaseConnection $connection,
-        protected \Closure $callback,
-        private bool $withLogin = false,
-    ) {
-        $this->previousConnection = DB::getDefaultConnection();
-        $this->user = $this->getDatabaseConnectionProvider();
+    public function __construct(string|ProvidesDatabaseConnection $connection, callable $callback)
+    {
+        $this->connection = $connection;
+        $this->callback = Closure::fromCallable($callback);
     }
 
-    public function withLogin(bool $withLogin): self
+    public function withLogin(bool $withLogin = true): self
     {
         $this->withLogin = $withLogin;
 
@@ -29,56 +29,56 @@ class TenantConnectionHelper
 
     public function handle(): mixed
     {
-        if (! $this->user) {
+        if (!$user = $this->getDatabaseConnectionProvider()) {
             return null;
         }
+        $this->preHandle($user);
 
-        $this->preHandle();
+        $result = ($this->callback)($user);
 
-        $result = ($this->callback)($this->user);
-
-        $this->postHandle();
+        $this->postHandle($user);
 
         return $result;
     }
 
-    private function preHandle(): void
+    protected function preHandle(Authenticatable|ProvidesDatabaseConnection $user): void
     {
-        $this->handleLogin();
-        $this->connect();
+        $this->handleLogin($user);
+        $this->connect($user);
     }
 
-    private function handleLogin(): void
+    protected function handleLogin(Authenticatable|ProvidesDatabaseConnection $user): void
     {
         if ($this->withLogin === false) {
             return;
         }
 
         $this->previousLogin = auth()->user();
-        auth()->login($this->user);
+        auth()->login($user);
     }
 
-    private function connect(): void
+    protected function connect(Authenticatable|ProvidesDatabaseConnection $user): void
     {
-        createDBConnection($this->user, true);
+        $this->previousConnection = DB::getDefaultConnection();
+        createDBConnection($user, true);
     }
 
-    private function postHandle(): void
+    protected function postHandle(Authenticatable|ProvidesDatabaseConnection $user): void
     {
-        $this->disconnect();
+        $this->disconnect($user);
         $this->handleLogout();
     }
 
-    private function disconnect(): void
+    protected function disconnect(Authenticatable|ProvidesDatabaseConnection $user): void
     {
         if (! app()->environment('testing')) {
-            DB::disconnect($this->user->getDatabaseName());
+            DB::disconnect($user->getDatabaseName());
         }
 
         DB::setDefaultConnection($this->previousConnection);
     }
 
-    private function handleLogout(): void
+    protected function handleLogout(): void
     {
         if ($this->previousLogin === null) {
             return;
@@ -88,7 +88,7 @@ class TenantConnectionHelper
         auth()->login($this->previousLogin);
     }
 
-    private function getDatabaseConnectionProvider(): ProvidesDatabaseConnection
+    protected function getDatabaseConnectionProvider(): ?ProvidesDatabaseConnection
     {
         if (is_string($this->connection)) {
             return RVConnection::$provider::databaseConnectionProviderByName($this->connection);
