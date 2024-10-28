@@ -8,74 +8,54 @@ use Illuminate\Support\Facades\DB;
 
 class TenantConnectionHelper
 {
-    protected string|ProvidesDatabaseConnection $connection;
+    protected ProvidesDatabaseConnection $connection;
     protected Closure $callback;
     protected string $previousConnection;
     protected ?Authenticatable $previousLogin = null;
-    protected bool $withLogin = false;
 
     public function __construct(string|ProvidesDatabaseConnection $connection, callable $callback)
     {
-        $this->connection = $connection;
+        $this->connection = is_string($connection)
+            ? RVConnection::$provider::databaseConnectionProviderByName($connection)
+            : $connection;
         $this->callback = Closure::fromCallable($callback);
-    }
-
-    public function withLogin(bool $withLogin = true): self
-    {
-        $this->withLogin = $withLogin;
-
-        return $this;
+        $this->previousConnection = DB::getDefaultConnection();
     }
 
     public function handle(): mixed
     {
-        if (!$user = $this->getDatabaseConnectionProvider()) {
-            return null;
-        }
-        $this->preHandle($user);
+        $this->connect();
 
-        $result = ($this->callback)($user);
+        $result = ($this->callback)($this->connection);
 
-        $this->postHandle($user);
+        $this->disconnect();
 
         return $result;
     }
 
-    protected function preHandle(Authenticatable|ProvidesDatabaseConnection $user): void
+    public function withLogin(): self
     {
-        $this->handleLogin($user);
-        $this->connect($user);
-    }
-
-    protected function handleLogin(Authenticatable|ProvidesDatabaseConnection $user): void
-    {
-        if ($this->withLogin === false) {
-            return;
-        }
+        abort_if(! $this->connection instanceof Authenticatable, 500, 'Current connection does not implement Authenticatable');
 
         $this->previousLogin = auth()->user();
-        auth()->login($user);
+        auth()->login($this->connection);
+
+        return $this;
     }
 
-    protected function connect(Authenticatable|ProvidesDatabaseConnection $user): void
+    protected function connect(): void
     {
-        $this->previousConnection = DB::getDefaultConnection();
-        createDBConnection($user, true);
+        createDBConnection($this->connection, true);
     }
 
-    protected function postHandle(Authenticatable|ProvidesDatabaseConnection $user): void
-    {
-        $this->disconnect($user);
-        $this->handleLogout();
-    }
-
-    protected function disconnect(Authenticatable|ProvidesDatabaseConnection $user): void
+    protected function disconnect(): void
     {
         if (! app()->environment('testing')) {
-            DB::disconnect($user->getDatabaseName());
+            DB::disconnect($this->connection->getDatabaseName());
         }
 
         DB::setDefaultConnection($this->previousConnection);
+        $this->handleLogout();
     }
 
     protected function handleLogout(): void
@@ -86,14 +66,5 @@ class TenantConnectionHelper
 
         auth()->logout();
         auth()->login($this->previousLogin);
-    }
-
-    protected function getDatabaseConnectionProvider(): ?ProvidesDatabaseConnection
-    {
-        if (is_string($this->connection)) {
-            return RVConnection::$provider::databaseConnectionProviderByName($this->connection);
-        }
-
-        return $this->connection;
     }
 }
