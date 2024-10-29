@@ -1,9 +1,8 @@
 <?php
 
-use BadChoice\Grog\Services\RVConnection;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
 use BadChoice\Grog\Services\ProvidesDatabaseConnection;
+use BadChoice\Grog\Services\RVConnection;
+
 /**
  * Creates a connection for the database of the $user
  * the name of the connection will be 'RevoRetail_{$user}'
