@@ -13,7 +13,7 @@ class RVConnection {
     protected bool $useReportsDatabase   = false;
     protected string $databaseName;
     protected string $connectionName;
-    protected ?string $dbInstance;
+    protected ?string $dbInstance = null;
 
     public function __construct($database)
     {
